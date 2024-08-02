@@ -1,4 +1,4 @@
-package com.example.moviesapp.ui.profile
+package com.example.moviesapp.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater

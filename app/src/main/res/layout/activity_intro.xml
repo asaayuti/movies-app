@@ -28,6 +28,7 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
             android:contentDescription="@string/banner_intro_movies"
             app:srcCompat="@drawable/intro_logo" />
 
@@ -35,7 +36,7 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="32dp"
+            android:layout_marginHorizontal="24dp"
             android:text="@string/intro_description"
             android:textAlignment="center"
             android:textColor="@color/white"

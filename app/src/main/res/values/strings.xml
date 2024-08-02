@@ -41,4 +41,8 @@
     <string name="image_favorite">Image favorite</string>
     <string name="image_share">Image share</string>
     <string name="title_film">Title Film</string>
+    <string name="overview">Overview</string>
+    <string name="something_wrong">Oops.. something went wrong</string>
+    <string name="no_data">Empty data</string>
+
 </resources>
