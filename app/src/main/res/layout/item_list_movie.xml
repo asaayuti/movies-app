@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_margin="6dp"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_film"
+        android:layout_width="170dp"
+        android:layout_height="210dp"
+        android:contentDescription="@string/image_film"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tv_title_film"
+        android:layout_width="0dp"
+        android:textAlignment="center"
+        android:lines="2"
+        android:maxLines="2"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginVertical="8dp"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:text="@string/title_film"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_film" />
+</androidx.constraintlayout.widget.ConstraintLayout>
