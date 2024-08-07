@@ -5,33 +5,37 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.example.moviesapp.MyApplication
 import com.example.moviesapp.R
 import com.example.moviesapp.core.domain.model.Movie
 import com.example.moviesapp.core.ui.ViewModelFactory
 import com.example.moviesapp.databinding.ActivityDetailBinding
 import eightbitlab.com.blurview.RenderScriptBlur
+import javax.inject.Inject
 
 class DetailActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var factory: ViewModelFactory
+
+    private val detailViewModel: DetailViewModel by viewModels { factory }
+
     private lateinit var binding: ActivityDetailBinding
-    private lateinit var detailViewModel: DetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.ivBack.setOnClickListener { finish() }
-
-        val factory = ViewModelFactory.getInstance(this)
-        detailViewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 
         val detailMovie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(EXTRA_DATA, Movie::class.java)

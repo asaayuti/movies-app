@@ -1,5 +1,6 @@
 package com.example.moviesapp.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,18 +8,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.moviesapp.MyApplication
 import com.example.moviesapp.R
 import com.example.moviesapp.core.data.source.Resource
 import com.example.moviesapp.core.ui.MovieAdapter
 import com.example.moviesapp.core.ui.ViewModelFactory
 import com.example.moviesapp.databinding.FragmentHomeBinding
 import com.example.moviesapp.detail.DetailActivity
+import javax.inject.Inject
 
 class HomeFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    @Inject
+    lateinit var factory: ViewModelFactory
+
+    private val homeViewModel: HomeViewModel by viewModels {
+        factory
+    }
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -35,6 +43,11 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity().application as MyApplication).appComponent.inject(this)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -48,9 +61,6 @@ class HomeFragment : Fragment() {
                 intent.putExtra(DetailActivity.EXTRA_DATA, selectedData)
                 startActivity(intent)
             }
-
-            val factory = ViewModelFactory.getInstance(requireActivity())
-            homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
             homeViewModel.movies.observe(viewLifecycleOwner) { movies ->
                 if (movies != null) {

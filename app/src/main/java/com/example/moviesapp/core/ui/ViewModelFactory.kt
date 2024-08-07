@@ -1,16 +1,17 @@
 package com.example.moviesapp.core.ui
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.moviesapp.core.di.Injection
 import com.example.moviesapp.core.domain.usecase.MovieUseCase
 import com.example.moviesapp.detail.DetailViewModel
+import com.example.moviesapp.di.AppScope
 import com.example.moviesapp.favorite.FavoriteViewModel
 import com.example.moviesapp.home.HomeViewModel
 import com.example.moviesapp.profile.ProfileViewModel
+import javax.inject.Inject
 
-class ViewModelFactory private constructor(private val movieUseCase: MovieUseCase) :
+@AppScope
+class ViewModelFactory @Inject constructor(private val movieUseCase: MovieUseCase) :
     ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
@@ -35,13 +36,4 @@ class ViewModelFactory private constructor(private val movieUseCase: MovieUseCas
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }
 
-    companion object {
-        @Volatile
-        private var instance: ViewModelFactory? = null
-
-        fun getInstance(context: Context): ViewModelFactory =
-            instance ?: synchronized(this) {
-                instance ?: ViewModelFactory(Injection.provideMovieUseCase(context))
-            }
-    }
 }

@@ -4,6 +4,7 @@ plugins {
 //    alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.devtools.ksp)
     id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 android {
@@ -76,4 +77,10 @@ dependencies {
     implementation(libs.adapter.rxjava2)
     implementation(libs.androidx.room.rxjava2)
     implementation(libs.androidx.lifecycle.reactivestreams.ktx)
+
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
+
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
 }

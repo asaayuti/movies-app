@@ -11,8 +11,11 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RemoteDataSource private constructor(private val apiService: ApiService) {
+@Singleton
+class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     @SuppressLint("CheckResult")
     fun getAllMovie(): Flowable<ApiResponse<List<MovieResponse>>> {
@@ -35,13 +38,4 @@ class RemoteDataSource private constructor(private val apiService: ApiService) {
         return resultData.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    companion object {
-        @Volatile
-        private var instance: RemoteDataSource? = null
-
-        fun getInstance(apiService: ApiService): RemoteDataSource =
-            instance ?: synchronized(this) {
-                instance ?: RemoteDataSource(apiService)
-            }
-    }
 }

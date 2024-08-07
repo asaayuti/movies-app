@@ -1,19 +1,27 @@
 package com.example.moviesapp.favorite
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.moviesapp.MyApplication
 import com.example.moviesapp.core.ui.MovieAdapter
 import com.example.moviesapp.core.ui.ViewModelFactory
 import com.example.moviesapp.databinding.FragmentFavoriteBinding
 import com.example.moviesapp.detail.DetailActivity
+import javax.inject.Inject
 
 class FavoriteFragment : Fragment() {
+
+    @Inject
+    lateinit var factory: ViewModelFactory
+
+    private val favoriteViewModel: FavoriteViewModel by viewModels { factory }
 
     private var _binding: FragmentFavoriteBinding? = null
 
@@ -21,7 +29,6 @@ class FavoriteFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private lateinit var favoriteViewModel: FavoriteViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +37,11 @@ class FavoriteFragment : Fragment() {
     ): View {
         _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity().application as MyApplication).appComponent.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,9 +54,6 @@ class FavoriteFragment : Fragment() {
                 intent.putExtra(DetailActivity.EXTRA_DATA, selectedData)
                 startActivity(intent)
             }
-
-            val factory = ViewModelFactory.getInstance(requireActivity())
-            favoriteViewModel = ViewModelProvider(this, factory)[FavoriteViewModel::class.java]
 
             favoriteViewModel.favoriteMovies.observe(viewLifecycleOwner) { dataMovies ->
                 movieAdapter.setData(dataMovies)

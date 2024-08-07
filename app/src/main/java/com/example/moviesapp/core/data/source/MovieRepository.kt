@@ -11,8 +11,11 @@ import com.example.moviesapp.core.utils.DataMapper
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MovieRepository private constructor(
+@Singleton
+class MovieRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors
@@ -51,20 +54,6 @@ class MovieRepository private constructor(
     override fun setFavoriteMovie(movie: Movie, state: Boolean) {
         val movieEntity = DataMapper.mapDomainToEntity(movie)
         appExecutors.diskIO().execute { localDataSource.setFavoriteMovie(movieEntity, state) }
-    }
-
-    companion object {
-        @Volatile
-        private var instance: MovieRepository? = null
-
-        fun getInstance(
-            remoteDataSource: RemoteDataSource,
-            localDataSource: LocalDataSource,
-            appExecutors: AppExecutors
-        ): MovieRepository =
-            instance ?: synchronized(this) {
-                instance ?: MovieRepository(remoteDataSource, localDataSource, appExecutors)
-            }
     }
 
 }
