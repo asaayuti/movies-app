@@ -1,45 +1,32 @@
 package com.example.moviesapp.core.data.source.remote
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.moviesapp.BuildConfig
 import com.example.moviesapp.core.data.source.remote.network.ApiResponse
 import com.example.moviesapp.core.data.source.remote.network.ApiService
-import com.example.moviesapp.core.data.source.remote.response.ListMovieResponse
 import com.example.moviesapp.core.data.source.remote.response.MovieResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class RemoteDataSource private constructor(private val apiService: ApiService) {
 
-    fun getAllMovie(): LiveData<ApiResponse<List<MovieResponse>>> {
-        val resultData = MutableLiveData<ApiResponse<List<MovieResponse>>>()
-
-        val client = apiService.getPopularMovies(BuildConfig.API_KEY)
-
-        client.enqueue(object : Callback<ListMovieResponse> {
-            override fun onResponse(
-                call: Call<ListMovieResponse>,
-                response: Response<ListMovieResponse>
-            ) {
-                val dataArray = response.body()?.results
-                resultData.value = if (dataArray != null) {
-                    ApiResponse.Success(dataArray)
+    suspend fun getAllMovie(): Flow<ApiResponse<List<MovieResponse>>> {
+        return flow {
+            try {
+                val response = apiService.getPopularMovies(BuildConfig.API_KEY)
+                val dataArray = response.results
+                if (dataArray.isNotEmpty()) {
+                    emit(ApiResponse.Success(response.results))
                 } else {
-                    ApiResponse.Empty
+                    emit(ApiResponse.Empty)
                 }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Log.e("RemoteDataSource", e.toString())
             }
-
-            override fun onFailure(call: Call<ListMovieResponse>, t: Throwable) {
-                resultData.value = ApiResponse.Error(t.message.toString())
-                Log.e("RemoteDataSource", "onFailure: ${t.message}")
-            }
-
-        })
-
-        return resultData
+        }.flowOn(Dispatchers.IO)
     }
 
     companion object {
