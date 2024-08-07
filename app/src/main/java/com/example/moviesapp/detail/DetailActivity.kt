@@ -11,25 +11,20 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.example.moviesapp.MyApplication
 import com.example.moviesapp.R
 import com.example.moviesapp.core.domain.model.Movie
-import com.example.moviesapp.core.ui.ViewModelFactory
 import com.example.moviesapp.databinding.ActivityDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderScriptBlur
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var factory: ViewModelFactory
-
-    private val detailViewModel: DetailViewModel by viewModels { factory }
+    private val detailViewModel: DetailViewModel by viewModels()
 
     private lateinit var binding: ActivityDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityDetailBinding.inflate(layoutInflater)
