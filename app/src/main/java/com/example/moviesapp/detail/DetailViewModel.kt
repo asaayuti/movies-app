@@ -1,11 +1,11 @@
 package com.example.moviesapp.detail
 
 import androidx.lifecycle.ViewModel
-import com.example.moviesapp.core.data.source.MovieRepository
-import com.example.moviesapp.core.data.source.local.entity.MovieEntity
+import com.example.moviesapp.core.domain.model.Movie
+import com.example.moviesapp.core.domain.usecase.MovieUseCase
 
-class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel() {
+class DetailViewModel(private val movieUseCase: MovieUseCase) : ViewModel() {
 
-    fun setFavoriteMovie(movie: MovieEntity, newStatus: Boolean) =
-        movieRepository.setFavoriteMovie(movie, newStatus)
+    fun setFavoriteMovie(movie: Movie, newStatus: Boolean) =
+        movieUseCase.setFavoriteMovie(movie, newStatus)
 }

@@ -1,9 +1,9 @@
 package com.example.moviesapp.home
 
 import androidx.lifecycle.ViewModel
-import com.example.moviesapp.core.data.source.MovieRepository
+import com.example.moviesapp.core.domain.usecase.MovieUseCase
 
-class HomeViewModel(movieRepository: MovieRepository) : ViewModel() {
+class HomeViewModel(movieUseCase: MovieUseCase) : ViewModel() {
 
-    val movies = movieRepository.getAllMovie()
+    val movies = movieUseCase.getAllMovie()
 }

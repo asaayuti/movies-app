@@ -1,6 +1,6 @@
 package com.example.moviesapp.profile
 
 import androidx.lifecycle.ViewModel
-import com.example.moviesapp.core.data.source.MovieRepository
+import com.example.moviesapp.core.domain.usecase.MovieUseCase
 
-class ProfileViewModel(movieRepository: MovieRepository) : ViewModel()
+class ProfileViewModel(movieUseCase: MovieUseCase) : ViewModel()

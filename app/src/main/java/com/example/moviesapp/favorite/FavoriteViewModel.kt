@@ -1,9 +1,9 @@
 package com.example.moviesapp.favorite
 
 import androidx.lifecycle.ViewModel
-import com.example.moviesapp.core.data.source.MovieRepository
+import com.example.moviesapp.core.domain.usecase.MovieUseCase
 
-class FavoriteViewModel(movieRepository: MovieRepository) : ViewModel() {
+class FavoriteViewModel(movieUseCase: MovieUseCase) : ViewModel() {
 
-    val favoriteMovies = movieRepository.getFavoriteMovie()
+    val favoriteMovies = movieUseCase.getFavoriteMovie()
 }

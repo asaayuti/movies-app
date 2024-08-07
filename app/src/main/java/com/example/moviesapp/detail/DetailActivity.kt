@@ -7,14 +7,12 @@ import android.view.ViewOutlineProvider
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.moviesapp.R
-import com.example.moviesapp.core.data.source.local.entity.MovieEntity
+import com.example.moviesapp.core.domain.model.Movie
 import com.example.moviesapp.core.ui.ViewModelFactory
 import com.example.moviesapp.databinding.ActivityDetailBinding
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -29,11 +27,6 @@ class DetailActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         binding.ivBack.setOnClickListener { finish() }
 
@@ -41,7 +34,7 @@ class DetailActivity : AppCompatActivity() {
         detailViewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 
         val detailMovie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(EXTRA_DATA, MovieEntity::class.java)
+            intent.getParcelableExtra(EXTRA_DATA, Movie::class.java)
         } else {
             @Suppress("DEPRECATION")
             intent.getParcelableExtra(EXTRA_DATA)
@@ -50,7 +43,7 @@ class DetailActivity : AppCompatActivity() {
         initBlurView()
     }
 
-    private fun showDetailMovie(detailMovie: MovieEntity?) {
+    private fun showDetailMovie(detailMovie: Movie?) {
         detailMovie?.let {
             binding.tvTitle.text = detailMovie.title
             binding.tvOverview.text = detailMovie.overview

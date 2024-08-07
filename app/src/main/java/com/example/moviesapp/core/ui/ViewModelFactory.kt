@@ -3,33 +3,33 @@ package com.example.moviesapp.core.ui
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.moviesapp.core.data.source.MovieRepository
 import com.example.moviesapp.core.di.Injection
+import com.example.moviesapp.core.domain.usecase.MovieUseCase
 import com.example.moviesapp.detail.DetailViewModel
 import com.example.moviesapp.favorite.FavoriteViewModel
 import com.example.moviesapp.home.HomeViewModel
 import com.example.moviesapp.profile.ProfileViewModel
 
-class ViewModelFactory private constructor(private val movieRepository: MovieRepository) :
+class ViewModelFactory private constructor(private val movieUseCase: MovieUseCase) :
     ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
         when {
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
-                HomeViewModel(movieRepository) as T
+                HomeViewModel(movieUseCase) as T
             }
 
             modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> {
-                FavoriteViewModel(movieRepository) as T
+                FavoriteViewModel(movieUseCase) as T
             }
 
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
-                ProfileViewModel(movieRepository) as T
+                ProfileViewModel(movieUseCase) as T
             }
 
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
-                DetailViewModel(movieRepository) as T
+                DetailViewModel(movieUseCase) as T
             }
 
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
@@ -41,7 +41,7 @@ class ViewModelFactory private constructor(private val movieRepository: MovieRep
 
         fun getInstance(context: Context): ViewModelFactory =
             instance ?: synchronized(this) {
-                instance ?: ViewModelFactory(Injection.provideRepository(context))
+                instance ?: ViewModelFactory(Injection.provideMovieUseCase(context))
             }
     }
 }

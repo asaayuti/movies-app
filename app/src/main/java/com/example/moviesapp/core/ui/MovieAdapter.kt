@@ -8,15 +8,15 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.moviesapp.R
-import com.example.moviesapp.core.data.source.local.entity.MovieEntity
+import com.example.moviesapp.core.domain.model.Movie
 import com.example.moviesapp.databinding.ItemListMovieBinding
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ListViewHolder>() {
 
-    private var listData = ArrayList<MovieEntity>()
-    var onItemClick: ((MovieEntity) -> Unit)? = null
+    private var listData = ArrayList<Movie>()
+    var onItemClick: ((Movie) -> Unit)? = null
 
-    fun setData(newListData: List<MovieEntity>?) {
+    fun setData(newListData: List<Movie>?) {
         if (newListData == null) return
         listData.clear()
         listData.addAll(newListData)
@@ -38,7 +38,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ListViewHolder>() {
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemListMovieBinding.bind(itemView)
 
-        fun bind(movie: MovieEntity) {
+        fun bind(movie: Movie) {
             val posterUrl = "https://image.tmdb.org/t/p/w500" + movie.posterPath
             var requestOptions = RequestOptions()
             requestOptions = requestOptions.transform(RoundedCorners(30))

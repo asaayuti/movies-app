@@ -1,11 +1,13 @@
 package com.example.moviesapp.core.data.source
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import com.example.moviesapp.core.data.source.local.LocalDataSource
-import com.example.moviesapp.core.data.source.local.entity.MovieEntity
 import com.example.moviesapp.core.data.source.remote.RemoteDataSource
 import com.example.moviesapp.core.data.source.remote.network.ApiResponse
 import com.example.moviesapp.core.data.source.remote.response.MovieResponse
+import com.example.moviesapp.core.domain.model.Movie
+import com.example.moviesapp.core.domain.repository.IMovieRepository
 import com.example.moviesapp.core.utils.AppExecutors
 import com.example.moviesapp.core.utils.DataMapper
 
@@ -13,12 +15,14 @@ class MovieRepository private constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors
-) {
+) : IMovieRepository {
 
-    fun getAllMovie(): LiveData<Resource<List<MovieEntity>>> =
-        object : NetworkBoundResource<List<MovieEntity>, List<MovieResponse>>(appExecutors) {
-            override fun loadFromDB(): LiveData<List<MovieEntity>> {
-                return localDataSource.getAllMovie()
+    override fun getAllMovie(): LiveData<Resource<List<Movie>>> =
+        object : NetworkBoundResource<List<Movie>, List<MovieResponse>>(appExecutors) {
+            override fun loadFromDB(): LiveData<List<Movie>> {
+                return (localDataSource.getAllMovie()).map {
+                    DataMapper.mapEntitiesToDomain(it)
+                }
             }
 
             override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> {
@@ -30,18 +34,21 @@ class MovieRepository private constructor(
                 localDataSource.insertMovies(movieList)
             }
 
-            override fun shouldFetch(data: List<MovieEntity>?): Boolean {
+            override fun shouldFetch(data: List<Movie>?): Boolean {
                 return data.isNullOrEmpty()
             }
 
         }.asLiveData()
 
-    fun getFavoriteMovie(): LiveData<List<MovieEntity>> {
-        return localDataSource.getFavoriteMovie()
+    override fun getFavoriteMovie(): LiveData<List<Movie>> {
+        return (localDataSource.getFavoriteMovie()).map {
+            DataMapper.mapEntitiesToDomain(it)
+        }
     }
 
-    fun setFavoriteMovie(movie: MovieEntity, state: Boolean) {
-        appExecutors.diskIO().execute { localDataSource.setFavoriteMovie(movie, state) }
+    override fun setFavoriteMovie(movie: Movie, state: Boolean) {
+        val movieEntity = DataMapper.mapDomainToEntity(movie)
+        appExecutors.diskIO().execute { localDataSource.setFavoriteMovie(movieEntity, state) }
     }
 
     companion object {
