@@ -1,14 +1,14 @@
 package com.example.moviesapp.core.data.source.local
 
-import androidx.lifecycle.LiveData
 import com.example.moviesapp.core.data.source.local.entity.MovieEntity
 import com.example.moviesapp.core.data.source.local.room.MovieDao
+import io.reactivex.Flowable
 
 class LocalDataSource private constructor(private val movieDao: MovieDao) {
 
-    fun getAllMovie(): LiveData<List<MovieEntity>> = movieDao.getAllMovie()
+    fun getAllMovie(): Flowable<List<MovieEntity>> = movieDao.getAllMovie()
 
-    fun getFavoriteMovie(): LiveData<List<MovieEntity>> = movieDao.getFavoriteMovie()
+    fun getFavoriteMovie(): Flowable<List<MovieEntity>> = movieDao.getFavoriteMovie()
 
     fun insertMovies(movieList: List<MovieEntity>) = movieDao.insertMovie(movieList)
 

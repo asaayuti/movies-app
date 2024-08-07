@@ -1,45 +1,38 @@
 package com.example.moviesapp.core.data.source.remote
 
+import android.annotation.SuppressLint
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.moviesapp.BuildConfig
 import com.example.moviesapp.core.data.source.remote.network.ApiResponse
 import com.example.moviesapp.core.data.source.remote.network.ApiService
-import com.example.moviesapp.core.data.source.remote.response.ListMovieResponse
 import com.example.moviesapp.core.data.source.remote.response.MovieResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
 class RemoteDataSource private constructor(private val apiService: ApiService) {
 
-    fun getAllMovie(): LiveData<ApiResponse<List<MovieResponse>>> {
-        val resultData = MutableLiveData<ApiResponse<List<MovieResponse>>>()
+    @SuppressLint("CheckResult")
+    fun getAllMovie(): Flowable<ApiResponse<List<MovieResponse>>> {
+        val resultData = PublishSubject.create<ApiResponse<List<MovieResponse>>>()
 
         val client = apiService.getPopularMovies(BuildConfig.API_KEY)
 
-        client.enqueue(object : Callback<ListMovieResponse> {
-            override fun onResponse(
-                call: Call<ListMovieResponse>,
-                response: Response<ListMovieResponse>
-            ) {
-                val dataArray = response.body()?.results
-                resultData.value = if (dataArray != null) {
-                    ApiResponse.Success(dataArray)
-                } else {
-                    ApiResponse.Empty
-                }
-            }
+        client
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .take(1)
+            .subscribe({ response ->
+                val dataArray = response.results
+                resultData.onNext(if (dataArray.isNotEmpty()) ApiResponse.Success(dataArray) else ApiResponse.Empty)
+            }, { error ->
+                resultData.onNext(ApiResponse.Error(error.message.toString()))
+                Log.e("RemoteDataSource", error.toString())
+            })
 
-            override fun onFailure(call: Call<ListMovieResponse>, t: Throwable) {
-                resultData.value = ApiResponse.Error(t.message.toString())
-                Log.e("RemoteDataSource", "onFailure: ${t.message}")
-            }
-
-        })
-
-        return resultData
+        return resultData.toFlowable(BackpressureStrategy.BUFFER)
     }
 
     companion object {

@@ -70,4 +70,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.room.runtime)
     ksp(libs.room.compiler)
+
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
+    implementation(libs.adapter.rxjava2)
+    implementation(libs.androidx.room.rxjava2)
+    implementation(libs.androidx.lifecycle.reactivestreams.ktx)
 }
