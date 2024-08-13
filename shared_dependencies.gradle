@@ -1,0 +1,21 @@
+dependencies {
+    implementation "androidx.core:core-ktx:$core_ktx_version"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "junit:junit:$junit_version"
+    implementation "androidx.test.ext:junit:$androidx_junit_version"
+    implementation "androidx.test.espresso:espresso-core:$espresso_core_version"
+
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_fragment_ktx_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_ui_ktx_version"
+
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    implementation "com.github.Dimezis:BlurView:$blurview_version"
+
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
+    implementation "com.google.dagger:hilt-android:$hilt_android_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_android_version"
+
+}

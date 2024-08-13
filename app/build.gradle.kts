@@ -6,6 +6,7 @@ plugins {
     id("kotlin-parcelize")
     id("kotlin-kapt")
 }
+apply(from = "../shared_dependencies.gradle")
 
 android {
     namespace = "com.example.moviesapp"
@@ -44,46 +45,9 @@ android {
         viewBinding = true
         buildConfig = true
     }
+    dynamicFeatures += setOf(":favorite")
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-
-    implementation(libs.glide)
-    implementation(libs.blurview)
-
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.logging.interceptor)
-
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.room.compiler)
-
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
-    implementation(libs.adapter.rxjava2)
-    implementation(libs.androidx.room.rxjava2)
-    implementation(libs.androidx.lifecycle.reactivestreams.ktx)
-
-    implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
-
-    implementation(libs.androidx.activity.ktx)
-    implementation(libs.androidx.fragment.ktx)
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    implementation(project(":core"))
 }

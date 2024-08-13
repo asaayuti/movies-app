@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_favorite"
-        android:name="com.example.moviesapp.favorite.FavoriteFragment"
+        android:name="com.example.favorite.FavoriteFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_favorite" />
 

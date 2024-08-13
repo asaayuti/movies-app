@@ -9,9 +9,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.core.data.source.Resource
+import com.example.core.ui.MovieAdapter
 import com.example.moviesapp.R
-import com.example.moviesapp.core.data.source.Resource
-import com.example.moviesapp.core.ui.MovieAdapter
 import com.example.moviesapp.databinding.FragmentHomeBinding
 import com.example.moviesapp.detail.DetailActivity
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,8 +1,8 @@
 package com.example.moviesapp.detail
 
 import androidx.lifecycle.ViewModel
-import com.example.moviesapp.core.domain.model.Movie
-import com.example.moviesapp.core.domain.usecase.MovieUseCase
+import com.example.core.domain.model.Movie
+import com.example.core.domain.usecase.MovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
