@@ -15,9 +15,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+@SuppressLint("CheckResult")
 class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
-    @SuppressLint("CheckResult")
     fun getAllMovie(): Flowable<ApiResponse<List<MovieResponse>>> {
         val resultData = PublishSubject.create<ApiResponse<List<MovieResponse>>>()
 
@@ -29,13 +29,43 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
             .take(1)
             .subscribe({ response ->
                 val dataArray = response.results
-                resultData.onNext(if (dataArray.isNotEmpty()) ApiResponse.Success(dataArray) else ApiResponse.Empty)
+                resultData.onNext(
+                    if (dataArray.isNotEmpty()) ApiResponse.Success(dataArray)
+                    else ApiResponse.Empty
+                )
             }, { error ->
                 resultData.onNext(ApiResponse.Error(error.message.toString()))
-                Log.e("RemoteDataSource", error.toString())
+                Log.e(TAG, "getAllMovie: $error")
             })
 
         return resultData.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    fun getSearchMovie(query: String): Flowable<ApiResponse<List<MovieResponse>>> {
+        val resultData = PublishSubject.create<ApiResponse<List<MovieResponse>>>()
+
+        val client = apiService.getSearchMovie(query, BuildConfig.API_KEY)
+
+        client
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .take(1)
+            .subscribe({ response ->
+                val dataArray = response.listMovie
+                resultData.onNext(
+                    if (dataArray.isNotEmpty()) ApiResponse.Success(dataArray)
+                    else ApiResponse.Empty
+                )
+            }, { error ->
+                resultData.onNext(ApiResponse.Error(error.message.toString()))
+                Log.e(TAG, "getSearchMovie: $error")
+            })
+
+        return resultData.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    companion object {
+        private const val TAG = "RemoteDataSource"
     }
 
 }

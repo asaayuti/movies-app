@@ -14,7 +14,7 @@ object DataMapper {
                 id = it.id,
                 overview = it.overview,
                 title = it.title,
-                posterPath = it.posterPath,
+                posterPath = it.posterPath ?: "",
                 releaseDate = it.releaseDate,
                 isFavorite = false
             )

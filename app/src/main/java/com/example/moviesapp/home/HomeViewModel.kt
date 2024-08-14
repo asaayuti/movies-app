@@ -7,7 +7,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(movieUseCase: MovieUseCase) : ViewModel() {
+class HomeViewModel @Inject constructor(private val movieUseCase: MovieUseCase) : ViewModel() {
 
     val movies = movieUseCase.getAllMovie().toLiveData()
+
+    fun getSearchMovie(query: String = "deadpool") = movieUseCase.getSearchMovie(query).toLiveData()
 }

@@ -1,5 +1,7 @@
 package com.example.core.data.source
 
+import android.annotation.SuppressLint
+import android.util.Log
 import com.example.core.data.source.local.LocalDataSource
 import com.example.core.data.source.remote.RemoteDataSource
 import com.example.core.data.source.remote.network.ApiResponse
@@ -15,6 +17,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+@SuppressLint("CheckResult")
 class MovieRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
@@ -38,11 +41,18 @@ class MovieRepository @Inject constructor(
                 localDataSource.insertMovies(movieList)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
+                    .subscribe({
+                        // Successfully saved data to the local database
+                    }, { error ->
+                        // Handle the error that occurred during saving
+                        Log.e("SaveCallResult", "Error deleting movies: $error")
+                    })
+//                }
             }
 
             override fun shouldFetch(data: List<Movie>?): Boolean {
-                return data.isNullOrEmpty()
+//                return data.isNullOrEmpty()
+                return true
             }
 
         }.asFlowable()
@@ -59,4 +69,32 @@ class MovieRepository @Inject constructor(
     override fun getMovieDetail(movieId: Int): Flowable<Movie> =
         localDataSource.getMovieDetail(movieId).map { DataMapper.mapEntityToDomain(it) }
 
+    override fun getSearchMovie(query: String): Flowable<Resource<List<Movie>>> =
+        object : NetworkBoundResource<List<Movie>, List<MovieResponse>>(appExecutors) {
+            override fun loadFromDB(): Flowable<List<Movie>> =
+                localDataSource.getSearchMovie(query).map { DataMapper.mapEntitiesToDomain(it) }
+
+            override fun shouldFetch(data: List<Movie>?): Boolean = true
+
+            override fun createCall(): Flowable<ApiResponse<List<MovieResponse>>> =
+                remoteDataSource.getSearchMovie(query)
+
+            override fun saveCallResult(data: List<MovieResponse>) {
+                val movieList = DataMapper.mapResponseToEntities(data)
+                localDataSource.insertMovies(movieList)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        // Successfully saved data to the local database
+                    }, { error ->
+                        // Handle the error that occurred during saving
+                        Log.e("SaveCallResult", "Error deleting movies: $error")
+                    })
+//                }
+            }
+
+            override fun onFetchFailed() {
+
+            }
+        }.asFlowable()
 }

@@ -25,6 +25,7 @@ class IntroActivity : AppCompatActivity() {
 
         binding.btnStart.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 }

@@ -13,4 +13,6 @@ interface IMovieRepository {
     fun setFavoriteMovie(movie: Movie, state: Boolean)
 
     fun getMovieDetail(movieId: Int): Flowable<Movie>
+
+    fun getSearchMovie(query: String): Flowable<Resource<List<Movie>>>
 }

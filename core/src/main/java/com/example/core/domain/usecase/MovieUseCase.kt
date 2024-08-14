@@ -9,4 +9,5 @@ interface MovieUseCase {
     fun getFavoriteMovie(): Flowable<List<Movie>>
     fun setFavoriteMovie(movie: Movie, state: Boolean)
     fun getDetailMovie(movieId: Int): Flowable<Movie>
+    fun getSearchMovie(query: String): Flowable<Resource<List<Movie>>>
 }

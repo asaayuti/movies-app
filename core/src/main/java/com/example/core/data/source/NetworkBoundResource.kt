@@ -56,7 +56,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val mExecut
             .doOnComplete {
                 mCompositeDisposable.dispose()
             }
-            .subscribe { response ->
+            .subscribe({ response ->
                 when (response) {
                     is ApiResponse.Success -> {
                         saveCallResult(response.data)
@@ -64,10 +64,12 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val mExecut
                         dbSource.subscribeOn(Schedulers.computation())
                             .observeOn(AndroidSchedulers.mainThread())
                             .take(1)
-                            .subscribe {
+                            .subscribe({
                                 dbSource.unsubscribeOn(Schedulers.io())
                                 result.onNext(Resource.Success(it))
-                            }
+                            }, { error ->
+                                result.onNext(Resource.Error(error.message.toString(), null))
+                            })
                     }
 
                     ApiResponse.Empty -> {
@@ -75,10 +77,12 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val mExecut
                         dbSource.subscribeOn(Schedulers.computation())
                             .observeOn(AndroidSchedulers.mainThread())
                             .take(1)
-                            .subscribe {
+                            .subscribe({
                                 dbSource.unsubscribeOn(Schedulers.io())
                                 result.onNext(Resource.Success(it))
-                            }
+                            }, { error ->
+                                result.onNext(Resource.Error(error.message.toString(), null))
+                            })
                     }
 
                     is ApiResponse.Error -> {
@@ -86,7 +90,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val mExecut
                         result.onNext(Resource.Error(response.errorMessage, null))
                     }
                 }
-            }
+            }, { error ->
+                result.onNext(Resource.Error(error.message.toString(), null))
+            })
         mCompositeDisposable.add(response)
     }
 

@@ -12,7 +12,7 @@ import io.reactivex.Flowable
 @Dao
 interface MovieDao {
 
-    @Query("SELECT * FROM movieentity")
+    @Query("SELECT * FROM movieentity ORDER BY title ASC")
     fun getAllMovie(): Flowable<List<MovieEntity>>
 
     @Query("SELECT * FROM movieentity where isFavorite = 1")
@@ -26,4 +26,7 @@ interface MovieDao {
 
     @Query("SELECT * FROM movieentity WHERE id = :movieId")
     fun getMovieDetail(movieId: Int): Flowable<MovieEntity>
+
+    @Query("SELECT * FROM movieentity WHERE title LIKE '%' || :query || '%'")
+    fun getSearchMovie(query: String): Flowable<List<MovieEntity>>
 }
