@@ -44,5 +44,14 @@ object DataMapper {
         isFavorite = input.isFavorite
     )
 
+    fun mapEntityToDomain(input: MovieEntity) = Movie(
+        id = input.id,
+        overview = input.overview,
+        title = input.title,
+        posterPath = input.posterPath,
+        releaseDate = input.releaseDate,
+        isFavorite = input.isFavorite
+    )
+
 
 }

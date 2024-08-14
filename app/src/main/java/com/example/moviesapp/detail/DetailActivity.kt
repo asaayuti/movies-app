@@ -1,6 +1,5 @@
 package com.example.moviesapp.detail
 
-import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
@@ -32,14 +31,12 @@ class DetailActivity : AppCompatActivity() {
 
         binding.ivBack.setOnClickListener { finish() }
 
-        val detailMovie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(EXTRA_DATA, Movie::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getParcelableExtra(EXTRA_DATA)
-        }
-        showDetailMovie(detailMovie)
+        val movieId = intent.getIntExtra(EXTRA_MOVIE_ID, 0)
         initBlurView()
+        detailViewModel.getDetailMovie(movieId).observe(this) {
+            showDetailMovie(it)
+        }
+
     }
 
     private fun showDetailMovie(detailMovie: Movie?) {
@@ -97,6 +94,6 @@ class DetailActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_DATA = "extra_data"
+        const val EXTRA_MOVIE_ID = "extra_movie_id"
     }
 }

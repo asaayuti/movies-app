@@ -11,4 +11,6 @@ interface IMovieRepository {
     fun getFavoriteMovie(): Flowable<List<Movie>>
 
     fun setFavoriteMovie(movie: Movie, state: Boolean)
+
+    fun getMovieDetail(movieId: Int): Flowable<Movie>
 }

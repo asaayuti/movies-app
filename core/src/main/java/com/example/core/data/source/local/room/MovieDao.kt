@@ -23,4 +23,7 @@ interface MovieDao {
 
     @Update
     fun updateFavoriteMovie(movie: MovieEntity)
+
+    @Query("SELECT * FROM movieentity WHERE id = :movieId")
+    fun getMovieDetail(movieId: Int): Flowable<MovieEntity>
 }

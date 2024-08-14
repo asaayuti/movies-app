@@ -44,9 +44,9 @@ class HomeFragment : Fragment() {
             window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.main_color)
 
             val movieAdapter = MovieAdapter()
-            movieAdapter.onItemClick = { selectedData ->
+            movieAdapter.onItemClick = { movieId ->
                 val intent = Intent(activity, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_DATA, selectedData)
+                intent.putExtra(DetailActivity.EXTRA_MOVIE_ID, movieId)
                 startActivity(intent)
             }
 

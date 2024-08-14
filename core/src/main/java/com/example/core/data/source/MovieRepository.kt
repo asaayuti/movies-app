@@ -56,4 +56,7 @@ class MovieRepository @Inject constructor(
         appExecutors.diskIO().execute { localDataSource.setFavoriteMovie(movieEntity, state) }
     }
 
+    override fun getMovieDetail(movieId: Int): Flowable<Movie> =
+        localDataSource.getMovieDetail(movieId).map { DataMapper.mapEntityToDomain(it) }
+
 }

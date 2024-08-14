@@ -20,4 +20,5 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
         movieDao.updateFavoriteMovie(movie)
     }
 
+    fun getMovieDetail(movieId: Int): Flowable<MovieEntity> = movieDao.getMovieDetail(movieId)
 }

@@ -62,7 +62,7 @@ class FavoriteFragment : Fragment() {
             val movieAdapter = MovieAdapter()
             movieAdapter.onItemClick = { selectedData ->
                 val intent = Intent(activity, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_DATA, selectedData)
+                intent.putExtra(DetailActivity.EXTRA_MOVIE_ID, selectedData)
                 startActivity(intent)
             }
 

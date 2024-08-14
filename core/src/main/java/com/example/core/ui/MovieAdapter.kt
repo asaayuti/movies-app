@@ -14,7 +14,7 @@ import com.example.core.domain.model.Movie
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ListViewHolder>() {
 
     private var listData = ArrayList<Movie>()
-    var onItemClick: ((Movie) -> Unit)? = null
+    var onItemClick: ((Int) -> Unit)? = null
 
     fun setData(newListData: List<Movie>?) {
         if (newListData == null) return
@@ -54,7 +54,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ListViewHolder>() {
 
         init {
             binding.root.setOnClickListener {
-                onItemClick?.invoke(listData[adapterPosition])
+                onItemClick?.invoke(listData[adapterPosition].id)
             }
         }
     }
