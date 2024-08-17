@@ -42,12 +42,9 @@ class MovieRepository @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        // Successfully saved data to the local database
                     }, { error ->
-                        // Handle the error that occurred during saving
                         Log.e("SaveCallResult", "Error deleting movies: $error")
                     })
-//                }
             }
 
             override fun shouldFetch(data: List<Movie>?): Boolean {
@@ -85,12 +82,9 @@ class MovieRepository @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        // Successfully saved data to the local database
                     }, { error ->
-                        // Handle the error that occurred during saving
                         Log.e("SaveCallResult", "Error deleting movies: $error")
                     })
-//                }
             }
 
             override fun onFetchFailed() {

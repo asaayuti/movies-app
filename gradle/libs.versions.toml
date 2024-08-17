@@ -11,6 +11,7 @@ roomCompiler = "2.5.2"
 roomRuntime = "2.5.2"
 ksp = "1.9.0-1.0.11"
 rxandroid = "2.1.1"
+rxbinding = "2.0.0"
 rxjava = "2.2.19"
 
 [libraries]
@@ -25,6 +26,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid" }
+rxbinding = { module = "com.jakewharton.rxbinding2:rxbinding", version.ref = "rxbinding" }
 rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjava" }
 
 [plugins]

@@ -1,13 +1,10 @@
 package com.example.moviesapp.home
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,7 +14,9 @@ import com.example.core.ui.MovieAdapter
 import com.example.moviesapp.R
 import com.example.moviesapp.databinding.FragmentHomeBinding
 import com.example.moviesapp.detail.DetailActivity
+import com.jakewharton.rxbinding2.widget.RxTextView
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.disposables.CompositeDisposable
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -26,6 +25,9 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var movieAdapter: MovieAdapter
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -41,78 +43,82 @@ class HomeFragment : Fragment() {
             val window = requireActivity().window
             window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.main_color)
 
-            val movieAdapter = MovieAdapter()
-            movieAdapter.onItemClick = { movieId ->
-                val intent = Intent(activity, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_MOVIE_ID, movieId)
-                startActivity(intent)
-            }
+            initRecyclerView()
+            getPopularMovies()
+            searchMovie()
 
-            homeViewModel.movies.observe(viewLifecycleOwner) { movies ->
-                if (movies != null) {
-                    when (movies) {
-                        is Resource.Loading -> binding.pbMovie.visibility = View.VISIBLE
-                        is Resource.Success -> {
-                            binding.pbMovie.visibility = View.GONE
-                            movieAdapter.setData(movies.data)
-                        }
+        }
 
-                        is Resource.Error -> {
-                            binding.pbMovie.visibility = View.GONE
-                            binding.viewError.root.visibility = View.VISIBLE
-                            binding.viewError.tvError.text =
-                                movies.message ?: getString(R.string.something_wrong)
-                        }
-                    }
-                }
-            }
+    }
 
-            binding.etSearch.setOnEditorActionListener { v, actionId, keyEvent ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    val text = binding.etSearch.text.toString()
+    private fun searchMovie() {
+        val searchStream = RxTextView.textChanges(binding.etSearch)
+            .map { binding.etSearch.text.toString() }
+            .subscribe { text ->
+                if (text.isNotEmpty()) {
                     homeViewModel.getSearchMovie(text).observe(viewLifecycleOwner) { movies ->
-                        if (movies != null) {
-                            when (movies) {
-                                is Resource.Loading -> binding.pbMovie.visibility = View.VISIBLE
+                        when (movies) {
+                            is Resource.Loading -> binding.pbMovie.visibility = View.VISIBLE
 
-                                is Resource.Success -> {
-                                    binding.pbMovie.visibility = View.GONE
-                                    movieAdapter.setData(movies.data)
-                                    binding.etSearch.text.clear()
-                                    hideKeyboard(v)
-                                }
+                            is Resource.Success -> {
+                                binding.pbMovie.visibility = View.GONE
+                                movieAdapter.setData(movies.data)
+                            }
 
-                                is Resource.Error -> {
-                                    binding.pbMovie.visibility = View.GONE
-                                    binding.viewError.root.visibility = View.VISIBLE
-                                    binding.viewError.tvError.text =
-                                        movies.message ?: getString(R.string.something_wrong)
-                                }
+                            is Resource.Error -> {
+                                binding.pbMovie.visibility = View.GONE
+                                binding.viewError.root.visibility = View.VISIBLE
+                                binding.viewError.tvError.text =
+                                    movies.message ?: getString(R.string.something_wrong)
                             }
                         }
                     }
-                    true
                 } else {
-                    false
+                    getPopularMovies()
                 }
             }
+        compositeDisposable.add(searchStream)
+    }
 
-            with(binding.rvMovie) {
-                layoutManager = GridLayoutManager(context, 2)
-                setHasFixedSize(true)
-                adapter = movieAdapter
-            }
+    private fun initRecyclerView() {
+        movieAdapter = MovieAdapter()
+        movieAdapter.onItemClick = { movieId ->
+            val intent = Intent(activity, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_MOVIE_ID, movieId)
+            startActivity(intent)
         }
 
+        with(binding.rvMovie) {
+            layoutManager = GridLayoutManager(context, 2)
+            setHasFixedSize(true)
+            adapter = movieAdapter
+        }
+    }
+
+    private fun getPopularMovies() {
+        homeViewModel.movies.observe(viewLifecycleOwner) { movies ->
+            if (movies != null) {
+                when (movies) {
+                    is Resource.Loading -> binding.pbMovie.visibility = View.VISIBLE
+                    is Resource.Success -> {
+                        binding.pbMovie.visibility = View.GONE
+                        movieAdapter.setData(movies.data)
+                    }
+
+                    is Resource.Error -> {
+                        binding.pbMovie.visibility = View.GONE
+                        binding.viewError.root.visibility = View.VISIBLE
+                        binding.viewError.tvError.text =
+                            movies.message ?: getString(R.string.something_wrong)
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    fun hideKeyboard(view: View) {
-        val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
+        compositeDisposable.clear()
     }
 }

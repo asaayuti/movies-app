@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.adapter.rxjava2)
     implementation(libs.androidx.room.rxjava2)
     api(libs.androidx.lifecycle.reactivestreams.ktx)
+    api(libs.rxbinding)
 
     api(libs.androidx.activity.ktx)
     api(libs.androidx.fragment.ktx)
