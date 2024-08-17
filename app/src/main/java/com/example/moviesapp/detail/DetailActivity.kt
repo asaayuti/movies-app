@@ -1,6 +1,7 @@
 package com.example.moviesapp.detail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import androidx.activity.enableEdgeToEdge
@@ -52,6 +53,8 @@ class DetailActivity : AppCompatActivity() {
                 .load(posterUrl)
                 .apply(requestOptions)
                 .into(binding.ivFilm)
+
+            Log.e("TAG", "showDetailMovie: ${detailMovie.posterPath}")
 
             var statusFavorite = detailMovie.isFavorite
             setStatusFavorite(statusFavorite)

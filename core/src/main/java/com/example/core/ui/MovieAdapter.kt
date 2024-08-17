@@ -39,16 +39,18 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ListViewHolder>() {
         private val binding = ItemListMovieBinding.bind(itemView)
 
         fun bind(movie: Movie) {
-            val posterUrl = "https://image.tmdb.org/t/p/w500" + movie.posterPath
-            var requestOptions = RequestOptions()
-            requestOptions = requestOptions.transform(RoundedCorners(30))
+            if (movie.posterPath.isNotEmpty()) {
+                val posterUrl = "https://image.tmdb.org/t/p/w500" + movie.posterPath
+                var requestOptions = RequestOptions()
+                requestOptions = requestOptions.transform(RoundedCorners(30))
 
-            with(binding) {
-                Glide.with(itemView.context)
-                    .load(posterUrl)
-                    .apply(requestOptions)
-                    .into(ivFilm)
-                tvTitleFilm.text = movie.title
+                with(binding) {
+                    Glide.with(itemView.context)
+                        .load(posterUrl)
+                        .apply(requestOptions)
+                        .into(ivFilm)
+                    tvTitleFilm.text = movie.title
+                }
             }
         }
 
