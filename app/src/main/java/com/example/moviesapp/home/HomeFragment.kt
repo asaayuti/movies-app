@@ -44,14 +44,12 @@ class HomeFragment : Fragment() {
             window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.main_color)
 
             initRecyclerView()
-            getPopularMovies()
-            searchMovie()
-
+            getMovies()
         }
 
     }
 
-    private fun searchMovie() {
+    private fun getMovies() {
         val searchStream = RxTextView.textChanges(binding.etSearch)
             .map { binding.etSearch.text.toString() }
             .subscribe { text ->
