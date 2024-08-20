@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.moviesapp.detail
 
 import android.os.Build
