@@ -54,21 +54,11 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setStatusFavorite(statusFavorite: Boolean) {
-        if (statusFavorite) {
-            binding.ivFavorite.setImageDrawable(
-                ContextCompat.getDrawable(
-                    this,
-                    R.drawable.baseline_bookmark_24
-                )
-            )
-        } else {
-            binding.ivFavorite.setImageDrawable(
-                ContextCompat.getDrawable(
-                    this,
-                    R.drawable.baseline_bookmark_border_24
-                )
-            )
-        }
+        val icon =
+            if (statusFavorite) R.drawable.baseline_bookmark_24 else R.drawable.baseline_bookmark_border_24
+        binding.ivFavorite.setImageDrawable(
+            ContextCompat.getDrawable(this, icon)
+        )
     }
 
     private fun initBlurView() {
