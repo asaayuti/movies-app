@@ -24,7 +24,9 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
 
     private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding
+            ?: throw IllegalStateException("View binding is only valid between onCreateView and onDestroyView")
 
     private lateinit var movieAdapter: MovieAdapter
     private val compositeDisposable = CompositeDisposable()

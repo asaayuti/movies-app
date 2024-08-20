@@ -7,10 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.example.core.domain.model.Movie
+import com.example.core.utils.loadImage
 import com.example.moviesapp.R
 import com.example.moviesapp.databinding.ActivityDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,15 +41,7 @@ class DetailActivity : AppCompatActivity() {
         detailMovie?.let {
             binding.tvTitle.text = detailMovie.title
             binding.tvOverview.text = detailMovie.overview
-
-            val posterUrl = "https://image.tmdb.org/t/p/w500" + detailMovie.posterPath
-            var requestOptions = RequestOptions()
-            requestOptions = requestOptions.transform(RoundedCorners(30))
-
-            Glide.with(this@DetailActivity)
-                .load(posterUrl)
-                .apply(requestOptions)
-                .into(binding.ivFilm)
+            binding.ivFilm.loadImage(detailMovie.posterPath)
 
             var statusFavorite = detailMovie.isFavorite
             setStatusFavorite(statusFavorite)

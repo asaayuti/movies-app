@@ -20,25 +20,17 @@ class FavoriteFragment : Fragment() {
 
     @Inject
     lateinit var factory: ViewModelFactory
+    private val favoriteViewModel: FavoriteViewModel by viewModels { factory }
 
-    private val favoriteViewModel: FavoriteViewModel by viewModels {
-        factory
-    }
-
-    private var _binding: FragmentFavoriteBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
+    private var binding: FragmentFavoriteBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        binding = FragmentFavoriteBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onAttach(context: Context) {
@@ -68,11 +60,13 @@ class FavoriteFragment : Fragment() {
 
             favoriteViewModel.favoriteMovies.observe(viewLifecycleOwner) { dataMovies ->
                 movieAdapter.setData(dataMovies)
-                binding.viewEmpty.root.visibility =
-                    if (dataMovies.isNotEmpty()) View.GONE else View.VISIBLE
+                binding?.let {
+                    it.viewEmpty.root.visibility =
+                        if (dataMovies.isNotEmpty()) View.GONE else View.VISIBLE
+                }
             }
 
-            with(binding.rvFavorite) {
+            binding?.rvFavorite?.apply {
                 layoutManager = GridLayoutManager(context, 2)
                 setHasFixedSize(true)
                 adapter = movieAdapter
@@ -82,6 +76,6 @@ class FavoriteFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 }

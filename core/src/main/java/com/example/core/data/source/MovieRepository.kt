@@ -48,7 +48,6 @@ class MovieRepository @Inject constructor(
             }
 
             override fun shouldFetch(data: List<Movie>?): Boolean {
-//                return data.isNullOrEmpty()
                 return true
             }
 

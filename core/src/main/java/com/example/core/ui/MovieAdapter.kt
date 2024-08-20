@@ -4,12 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.example.core.R
 import com.example.core.databinding.ItemListMovieBinding
 import com.example.core.domain.model.Movie
+import com.example.core.utils.loadImage
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ListViewHolder>() {
 
@@ -40,15 +38,8 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ListViewHolder>() {
 
         fun bind(movie: Movie) {
             if (movie.posterPath.isNotEmpty()) {
-                val posterUrl = "https://image.tmdb.org/t/p/w500" + movie.posterPath
-                var requestOptions = RequestOptions()
-                requestOptions = requestOptions.transform(RoundedCorners(30))
-
                 with(binding) {
-                    Glide.with(itemView.context)
-                        .load(posterUrl)
-                        .apply(requestOptions)
-                        .into(ivFilm)
+                    ivFilm.loadImage(movie.posterPath)
                     tvTitleFilm.text = movie.title
                 }
             }
