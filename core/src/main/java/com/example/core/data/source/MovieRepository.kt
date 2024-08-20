@@ -32,6 +32,8 @@ class MovieRepository @Inject constructor(
                 }
             }
 
+            override fun shouldFetch(data: List<Movie>?): Boolean = data.isNullOrEmpty()
+
             override fun createCall(): Flowable<ApiResponse<List<MovieResponse>>> {
                 return remoteDataSource.getAllMovie()
             }
@@ -46,31 +48,14 @@ class MovieRepository @Inject constructor(
                         Log.e("SaveCallResult", "Error deleting movies: $error")
                     })
             }
-
-            override fun shouldFetch(data: List<Movie>?): Boolean {
-                return true
-            }
-
         }.asFlowable()
-
-    override fun getFavoriteMovie(): Flowable<List<Movie>> {
-        return localDataSource.getFavoriteMovie().map { DataMapper.mapEntitiesToDomain(it) }
-    }
-
-    override fun setFavoriteMovie(movie: Movie, state: Boolean) {
-        val movieEntity = DataMapper.mapDomainToEntity(movie)
-        appExecutors.diskIO().execute { localDataSource.setFavoriteMovie(movieEntity, state) }
-    }
-
-    override fun getMovieDetail(movieId: Int): Flowable<Movie> =
-        localDataSource.getMovieDetail(movieId).map { DataMapper.mapEntityToDomain(it) }
 
     override fun getSearchMovie(query: String): Flowable<Resource<List<Movie>>> =
         object : NetworkBoundResource<List<Movie>, List<MovieResponse>>(appExecutors) {
             override fun loadFromDB(): Flowable<List<Movie>> =
                 localDataSource.getSearchMovie(query).map { DataMapper.mapEntitiesToDomain(it) }
 
-            override fun shouldFetch(data: List<Movie>?): Boolean = true
+            override fun shouldFetch(data: List<Movie>?): Boolean = data.isNullOrEmpty()
 
             override fun createCall(): Flowable<ApiResponse<List<MovieResponse>>> =
                 remoteDataSource.getSearchMovie(query)
@@ -85,9 +70,17 @@ class MovieRepository @Inject constructor(
                         Log.e("SaveCallResult", "Error deleting movies: $error")
                     })
             }
-
-            override fun onFetchFailed() {
-
-            }
         }.asFlowable()
+
+    override fun getFavoriteMovie(): Flowable<List<Movie>> {
+        return localDataSource.getFavoriteMovie().map { DataMapper.mapEntitiesToDomain(it) }
+    }
+
+    override fun setFavoriteMovie(movie: Movie, state: Boolean) {
+        val movieEntity = DataMapper.mapDomainToEntity(movie)
+        appExecutors.diskIO().execute { localDataSource.setFavoriteMovie(movieEntity, state) }
+    }
+
+    override fun getMovieDetail(movieId: Int): Flowable<Movie> =
+        localDataSource.getMovieDetail(movieId).map { DataMapper.mapEntityToDomain(it) }
 }

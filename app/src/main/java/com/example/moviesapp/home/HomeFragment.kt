@@ -56,28 +56,32 @@ class HomeFragment : Fragment() {
             .map { binding.etSearch.text.toString() }
             .subscribe { text ->
                 if (text.isNotEmpty()) {
-                    homeViewModel.getSearchMovie(text).observe(viewLifecycleOwner) { movies ->
-                        when (movies) {
-                            is Resource.Loading -> binding.pbMovie.visibility = View.VISIBLE
-
-                            is Resource.Success -> {
-                                binding.pbMovie.visibility = View.GONE
-                                movieAdapter.setData(movies.data)
-                            }
-
-                            is Resource.Error -> {
-                                binding.pbMovie.visibility = View.GONE
-                                binding.viewError.root.visibility = View.VISIBLE
-                                binding.viewError.tvError.text =
-                                    movies.message ?: getString(R.string.something_wrong)
-                            }
-                        }
-                    }
+                    getSearchMovies(text)
                 } else {
                     getPopularMovies()
                 }
             }
         compositeDisposable.add(searchStream)
+    }
+
+    private fun getSearchMovies(text: String) {
+        homeViewModel.getSearchMovie(text).observe(viewLifecycleOwner) { movies ->
+            when (movies) {
+                is Resource.Loading -> binding.pbMovie.visibility = View.VISIBLE
+
+                is Resource.Success -> {
+                    binding.pbMovie.visibility = View.GONE
+                    movieAdapter.setData(movies.data)
+                }
+
+                is Resource.Error -> {
+                    binding.pbMovie.visibility = View.GONE
+                    binding.viewError.root.visibility = View.VISIBLE
+                    binding.viewError.tvError.text =
+                        movies.message ?: getString(R.string.something_wrong)
+                }
+            }
+        }
     }
 
     private fun initRecyclerView() {

@@ -11,6 +11,8 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
 
     fun getAllMovie(): Flowable<List<MovieEntity>> = movieDao.getAllMovie()
 
+    fun getSearchMovie(query: String): Flowable<List<MovieEntity>> = movieDao.getSearchMovie(query)
+
     fun getFavoriteMovie(): Flowable<List<MovieEntity>> = movieDao.getFavoriteMovie()
 
     fun insertMovies(movieList: List<MovieEntity>) = movieDao.insertMovie(movieList)
@@ -21,6 +23,4 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
     }
 
     fun getMovieDetail(movieId: Int): Flowable<MovieEntity> = movieDao.getMovieDetail(movieId)
-
-    fun getSearchMovie(query: String): Flowable<List<MovieEntity>> = movieDao.getSearchMovie(query)
 }
