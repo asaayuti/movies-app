@@ -1,21 +1,20 @@
 dependencies {
-    implementation "androidx.core:core-ktx:$core_ktx_version"
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation "com.google.android.material:material:$material_version"
-    implementation "junit:junit:$junit_version"
-    implementation "androidx.test.ext:junit:$androidx_junit_version"
-    implementation "androidx.test.espresso:espresso-core:$espresso_core_version"
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.junit
+    implementation libs.androidx.junit
+    implementation libs.androidx.espresso.core
 
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_fragment_ktx_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_ui_ktx_version"
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
 
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    implementation "com.github.Dimezis:BlurView:$blurview_version"
+    implementation libs.glide
+    implementation libs.blurview
 
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation libs.dagger
+    kapt libs.dagger.compiler
 
-    implementation "com.google.dagger:hilt-android:$hilt_android_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_android_version"
-
+    implementation libs.hilt.android
+    kapt libs.hilt.android.compiler
 }
