@@ -1,5 +1,6 @@
 package com.example.moviesapp.detail
 
+import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
@@ -12,6 +13,7 @@ import com.example.core.utils.loadImage
 import com.example.moviesapp.R
 import com.example.moviesapp.databinding.ActivityDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
 
 @AndroidEntryPoint
@@ -66,7 +68,13 @@ class DetailActivity : AppCompatActivity() {
         val rootView = decorView.findViewById<ViewGroup>(android.R.id.content)
         val windowsBackground = decorView.background
 
-        binding.blurView.setupWith(rootView, RenderScriptBlur(this))
+        val blurview = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            binding.blurView.setupWith(rootView, RenderEffectBlur())
+        } else {
+            @Suppress("DEPRECATION")
+            binding.blurView.setupWith(rootView, RenderScriptBlur(this))
+        }
+        blurview
             .setFrameClearDrawable(windowsBackground)
             .setBlurRadius(10f)
         binding.blurView.outlineProvider = ViewOutlineProvider.BACKGROUND
