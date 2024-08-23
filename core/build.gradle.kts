@@ -61,4 +61,7 @@ dependencies {
 
     api(libs.androidx.activity.ktx)
     api(libs.androidx.fragment.ktx)
+
+    implementation(libs.android.database.sqlcipher)
+    implementation(libs.androidx.sqlite.ktx)
 }
