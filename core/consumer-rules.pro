@@ -85,3 +85,59 @@ public *;
 ##---------------Begin: proguard configuration for RxJava ----------
 # Uncomment if you use RxJava
 -dontwarn java.util.concurrent.Flow*
+
+# Keep for the reflective cast done in EntryPoints.
+# See b/183070411#comment4 for more info.
+-keep,allowobfuscation,allowshrinking @dagger.hilt.EntryPoint class *
+
+# Keep for the reflective cast done in EntryPoints.
+# See b/183070411#comment4 for more info.
+-keep,allowobfuscation,allowshrinking @dagger.hilt.android.EarlyEntryPoint class *
+
+# Keep for the reflective cast done in EntryPoints.
+# See b/183070411#comment4 for more info.
+-keep,allowobfuscation,allowshrinking @dagger.hilt.internal.ComponentEntryPoint class *
+-keep,allowobfuscation,allowshrinking @dagger.hilt.internal.GeneratedEntryPoint class *
+
+-dontwarn com.google.errorprone.annotations.MustBeClosed
+ # TODO(b/324097623) Remove the keep rules once test won't be affected by obfuscation
+-keep class kotlin.**
+-keep class javax.** { *; }
+
+-dontwarn com.google.errorprone.annotations.MustBeClosed
+-keep class kotlin.**
+
+-dontwarn com.google.errorprone.annotations.MustBeClosed
+ # TODO(b/324097623) Remove the keep rules once test won't be affected by obfuscation
+-keep class kotlin.**
+
+-keep class dagger.** { *; }
+-keep class javax.inject.** { *; }
+-keep class com.google.dagger.** { *; }
+
+-dontwarn com.example.core.data.source.MovieRepository
+-dontwarn com.example.core.data.source.Resource$Error
+-dontwarn com.example.core.data.source.Resource$Loading
+-dontwarn com.example.core.data.source.Resource$Success
+-dontwarn com.example.core.data.source.Resource
+-dontwarn com.example.core.data.source.local.LocalDataSource
+-dontwarn com.example.core.data.source.remote.RemoteDataSource
+-dontwarn com.example.core.data.source.remote.network.ApiService
+-dontwarn com.example.core.di.DatabaseModule
+-dontwarn com.example.core.di.DatabaseModule_ProvideDatabaseFactory
+-dontwarn com.example.core.di.DatabaseModule_ProvideMovieDaoFactory
+-dontwarn com.example.core.di.NetworkModule
+-dontwarn com.example.core.di.NetworkModule_ProvideApiServiceFactory
+-dontwarn com.example.core.di.NetworkModule_ProvideOkHttpClientFactory
+-dontwarn com.example.core.domain.model.Movie
+-dontwarn com.example.core.domain.repository.IMovieRepository
+-dontwarn com.example.core.domain.usecase.MovieInteractor
+-dontwarn com.example.core.domain.usecase.MovieUseCase
+-dontwarn com.example.core.ui.MovieAdapter
+-dontwarn com.example.core.utils.AppExecutors
+-dontwarn com.example.core.utils.UtilsKt
+
+-dontwarn com.example.core.di.RepositoryModule
+-keep class androidx.viewbinding.** { *; }
+
+

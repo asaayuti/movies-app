@@ -42,3 +42,6 @@
 -keep class com.example.core.ui.MovieAdapter { *; }
 -keep class com.example.core.utils.AppExecutors { *; }
 -keep class com.example.core.utils.UtilsKt { *; }
+
+-keep class com.example.core.di.RepositoryModule { *; }
+
