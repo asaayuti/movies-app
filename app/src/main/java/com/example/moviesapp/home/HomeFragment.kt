@@ -28,7 +28,6 @@ class HomeFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("View binding is only valid between onCreateView and onDestroyView")
 
-    private lateinit var movieAdapter: MovieAdapter
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
@@ -45,26 +44,38 @@ class HomeFragment : Fragment() {
             val window = requireActivity().window
             window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.main_color)
 
-            initRecyclerView()
-            getMovies()
+            val movieAdapter = MovieAdapter()
+            movieAdapter.onItemClick = { movieId ->
+                val intent = Intent(activity, DetailActivity::class.java)
+                intent.putExtra(DetailActivity.EXTRA_MOVIE_ID, movieId)
+                startActivity(intent)
+            }
+
+            with(binding.rvMovie) {
+                layoutManager = GridLayoutManager(context, 2)
+                setHasFixedSize(true)
+                adapter = movieAdapter
+            }
+
+            getMovies(movieAdapter)
         }
 
     }
 
-    private fun getMovies() {
+    private fun getMovies(movieAdapter: MovieAdapter) {
         val searchStream = RxTextView.textChanges(binding.etSearch)
             .map { binding.etSearch.text.toString() }
             .subscribe { text ->
                 if (text.isNotEmpty()) {
-                    getSearchMovies(text)
+                    getSearchMovies(text, movieAdapter)
                 } else {
-                    getPopularMovies()
+                    getPopularMovies(movieAdapter)
                 }
             }
         compositeDisposable.add(searchStream)
     }
 
-    private fun getSearchMovies(text: String) {
+    private fun getSearchMovies(text: String, movieAdapter: MovieAdapter) {
         homeViewModel.getSearchMovie(text).observe(viewLifecycleOwner) { movies ->
             when (movies) {
                 is Resource.Loading -> binding.pbMovie.visibility = View.VISIBLE
@@ -84,22 +95,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun initRecyclerView() {
-        movieAdapter = MovieAdapter()
-        movieAdapter.onItemClick = { movieId ->
-            val intent = Intent(activity, DetailActivity::class.java)
-            intent.putExtra(DetailActivity.EXTRA_MOVIE_ID, movieId)
-            startActivity(intent)
-        }
-
-        with(binding.rvMovie) {
-            layoutManager = GridLayoutManager(context, 2)
-            setHasFixedSize(true)
-            adapter = movieAdapter
-        }
-    }
-
-    private fun getPopularMovies() {
+    private fun getPopularMovies(movieAdapter: MovieAdapter) {
         homeViewModel.movies.observe(viewLifecycleOwner) { movies ->
             if (movies != null) {
                 when (movies) {

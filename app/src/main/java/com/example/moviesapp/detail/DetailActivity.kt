@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.example.core.domain.model.Movie
 import com.example.core.utils.loadImage
 import com.example.moviesapp.R
@@ -81,6 +82,11 @@ class DetailActivity : AppCompatActivity() {
             .setBlurRadius(10f)
         binding.blurView.outlineProvider = ViewOutlineProvider.BACKGROUND
         binding.blurView.clipToOutline = true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Glide.get(this).clearMemory()
     }
 
     companion object {
