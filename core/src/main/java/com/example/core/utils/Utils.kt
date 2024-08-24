@@ -7,7 +7,7 @@ import com.bumptech.glide.request.RequestOptions
 
 
 fun ImageView.loadImage(url: String) {
-    val posterUrl = "https://image.tmdb.org/t/p/w500$url"
+    val posterUrl = Constants.IMAGE_URL + url
     var requestOptions = RequestOptions()
     requestOptions = requestOptions.transform(RoundedCorners(30))
 

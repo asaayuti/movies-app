@@ -18,6 +18,11 @@ android {
         consumerProguardFiles("consumer-rules.pro")
 
         buildConfigField("String", "API_KEY", "\"ca6da6d30ad6a9105dd5053fe25975cb\"")
+        buildConfigField(
+            "String",
+            "CERTIFICATE_KEY",
+            "\"sha256/k1Hdw5sdSn5kh/gemLVSQD/P4i4IBQEY1tW4WNxh9XM=\""
+        )
 
     }
 

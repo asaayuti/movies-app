@@ -22,21 +22,14 @@ abstract class NetworkBoundResource<ResultType, RequestType>(private val mExecut
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
-            .subscribe(
-                { value ->
-                    dbSource.unsubscribeOn(Schedulers.io())
-
-                    if (shouldFetch(value)) {
-                        fetchFromNetwork()
-                    } else {
-                        result.onNext(Resource.Success(value))
-                    }
-                },
-                { error ->
-                    result.onNext(Resource.Error(error.message ?: "Unknown error"))
+            .subscribe { value ->
+                dbSource.unsubscribeOn(Schedulers.io())
+                if (shouldFetch(value)) {
+                    fetchFromNetwork()
+                } else {
+                    result.onNext(Resource.Success(value))
                 }
-            )
-
+            }
         mCompositeDisposable.add(db)
     }
 

@@ -2,7 +2,6 @@ package com.example.core.data.source.remote
 
 import android.annotation.SuppressLint
 import android.util.Log
-import com.example.core.BuildConfig
 import com.example.core.data.source.remote.network.ApiResponse
 import com.example.core.data.source.remote.network.ApiService
 import com.example.core.data.source.remote.response.MovieResponse
@@ -21,7 +20,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     fun getAllMovie(): Flowable<ApiResponse<List<MovieResponse>>> {
         val resultData = PublishSubject.create<ApiResponse<List<MovieResponse>>>()
 
-        val client = apiService.getPopularMovies(BuildConfig.API_KEY)
+        val client = apiService.getPopularMovies()
 
         client
             .subscribeOn(Schedulers.computation())
@@ -44,7 +43,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
     fun getSearchMovie(query: String): Flowable<ApiResponse<List<MovieResponse>>> {
         val resultData = PublishSubject.create<ApiResponse<List<MovieResponse>>>()
 
-        val client = apiService.getSearchMovie(query, BuildConfig.API_KEY)
+        val client = apiService.getSearchMovie(query)
 
         client
             .subscribeOn(Schedulers.computation())
