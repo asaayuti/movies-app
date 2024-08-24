@@ -19,3 +19,26 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keep specific classes and their members
+-keep class com.example.core.data.source.MovieRepository { *; }
+-keep class com.example.core.data.source.Resource$Error { *; }
+-keep class com.example.core.data.source.Resource$Loading { *; }
+-keep class com.example.core.data.source.Resource$Success { *; }
+-keep class com.example.core.data.source.Resource { *; }
+-keep class com.example.core.data.source.local.LocalDataSource { *; }
+-keep class com.example.core.data.source.remote.RemoteDataSource { *; }
+-keep class com.example.core.data.source.remote.network.ApiService { *; }
+-keep class com.example.core.di.DatabaseModule { *; }
+-keep class com.example.core.di.DatabaseModule_ProvideDatabaseFactory { *; }
+-keep class com.example.core.di.DatabaseModule_ProvideMovieDaoFactory { *; }
+-keep class com.example.core.di.NetworkModule { *; }
+-keep class com.example.core.di.NetworkModule_ProvideApiServiceFactory { *; }
+-keep class com.example.core.di.NetworkModule_ProvideOkHttpClientFactory { *; }
+-keep class com.example.core.domain.model.Movie { *; }
+-keep class com.example.core.domain.repository.IMovieRepository { *; }
+-keep class com.example.core.domain.usecase.MovieInteractor { *; }
+-keep class com.example.core.domain.usecase.MovieUseCase { *; }
+-keep class com.example.core.ui.MovieAdapter { *; }
+-keep class com.example.core.utils.AppExecutors { *; }
+-keep class com.example.core.utils.UtilsKt { *; }

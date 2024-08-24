@@ -24,8 +24,9 @@ class DatabaseModule {
         val factory = SupportFactory(passphrase)
         return Room.databaseBuilder(
             context,
-            MovieDatabase::class.java, "Movie.db"
-        ).fallbackToDestructiveMigration()
+            MovieDatabase::class.java, "movie.db"
+        )
+            .fallbackToDestructiveMigration()
             .openHelperFactory(factory)
             .build()
     }
