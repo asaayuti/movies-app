@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.core.ui.MovieAdapter
+import com.example.core.ui.MovieListAdapter
 import com.example.favorite.databinding.FragmentFavoriteBinding
 import com.example.moviesapp.detail.DetailActivity
 import com.example.moviesapp.di.FavoriteModuleDependencies
@@ -23,6 +23,7 @@ class FavoriteFragment : Fragment() {
     private val favoriteViewModel: FavoriteViewModel by viewModels { factory }
 
     private var binding: FragmentFavoriteBinding? = null
+    private lateinit var movieListAdapter: MovieListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,15 +52,16 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null) {
-            val movieAdapter = MovieAdapter()
-            movieAdapter.onItemClick = { movieId ->
-                val intent = Intent(activity, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_MOVIE_ID, movieId)
-                startActivity(intent)
+
+            movieListAdapter = MovieListAdapter { movieId ->
+                Intent(activity, DetailActivity::class.java).apply {
+                    putExtra(DetailActivity.EXTRA_MOVIE_ID, movieId)
+                    startActivity(this)
+                }
             }
 
             favoriteViewModel.favoriteMovies.observe(viewLifecycleOwner) { dataMovies ->
-                movieAdapter.setData(dataMovies)
+                movieListAdapter.submitList(dataMovies)
                 binding?.let {
                     it.viewEmpty.root.visibility =
                         if (dataMovies.isNotEmpty()) View.GONE else View.VISIBLE
@@ -69,7 +71,7 @@ class FavoriteFragment : Fragment() {
             binding?.rvFavorite?.apply {
                 layoutManager = GridLayoutManager(context, 2)
                 setHasFixedSize(true)
-                adapter = movieAdapter
+                adapter = movieListAdapter
             }
         }
     }

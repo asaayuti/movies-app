@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.core.data.source.Resource
-import com.example.core.ui.MovieAdapter
+import com.example.core.ui.MovieListAdapter
 import com.example.moviesapp.R
 import com.example.moviesapp.databinding.FragmentHomeBinding
 import com.example.moviesapp.detail.DetailActivity
@@ -22,19 +22,16 @@ import io.reactivex.disposables.CompositeDisposable
 class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
-
-    private var _binding: FragmentHomeBinding? = null
-    private val binding
-        get() = _binding
-            ?: throw IllegalStateException("View binding is only valid between onCreateView and onDestroyView")
-
+    private var binding: FragmentHomeBinding? = null
     private val compositeDisposable = CompositeDisposable()
+
+    private lateinit var movieListAdapter: MovieListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,72 +41,80 @@ class HomeFragment : Fragment() {
             val window = requireActivity().window
             window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.main_color)
 
-            val movieAdapter = MovieAdapter()
-            movieAdapter.onItemClick = { movieId ->
-                val intent = Intent(activity, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_MOVIE_ID, movieId)
-                startActivity(intent)
+            movieListAdapter = MovieListAdapter { movieId ->
+                Intent(activity, DetailActivity::class.java).apply {
+                    putExtra(DetailActivity.EXTRA_MOVIE_ID, movieId)
+                    startActivity(this)
+                }
             }
 
-            with(binding.rvMovie) {
+            getMovies()
+
+            binding?.rvMovie?.apply {
                 layoutManager = GridLayoutManager(context, 2)
                 setHasFixedSize(true)
-                adapter = movieAdapter
+                adapter = movieListAdapter
             }
-
-            getMovies(movieAdapter)
         }
 
     }
 
-    private fun getMovies(movieAdapter: MovieAdapter) {
-        val searchStream = RxTextView.textChanges(binding.etSearch)
-            .map { binding.etSearch.text.toString() }
-            .subscribe { text ->
-                if (text.isNotEmpty()) {
-                    getSearchMovies(text, movieAdapter)
-                } else {
-                    getPopularMovies(movieAdapter)
+    private fun getMovies() {
+        val searchStream = binding?.etSearch?.let {
+            RxTextView.textChanges(it)
+                .map { binding?.etSearch?.text.toString() }
+                .subscribe { text ->
+                    if (text.isNotEmpty()) {
+                        getSearchMovies(text)
+                    } else {
+                        getPopularMovies()
+                    }
                 }
-            }
-        compositeDisposable.add(searchStream)
+        }
+        if (searchStream != null) {
+            compositeDisposable.add(searchStream)
+        }
     }
 
-    private fun getSearchMovies(text: String, movieAdapter: MovieAdapter) {
+    private fun getSearchMovies(text: String) {
         homeViewModel.getSearchMovie(text).observe(viewLifecycleOwner) { movies ->
             when (movies) {
-                is Resource.Loading -> binding.pbMovie.visibility = View.VISIBLE
+                is Resource.Loading -> binding?.pbMovie?.visibility = View.VISIBLE
 
                 is Resource.Success -> {
-                    binding.pbMovie.visibility = View.GONE
-                    movieAdapter.setData(movies.data)
+                    binding?.pbMovie?.visibility = View.GONE
+                    movieListAdapter.submitList(movies.data)
                 }
 
                 is Resource.Error -> {
-                    binding.pbMovie.visibility = View.GONE
-                    binding.viewError.root.visibility = View.VISIBLE
-                    binding.viewError.tvError.text =
-                        movies.message ?: getString(R.string.something_wrong)
+                    binding?.apply {
+                        pbMovie.visibility = View.GONE
+                        viewError.root.visibility = View.VISIBLE
+                        viewError.tvError.text =
+                            movies.message ?: getString(R.string.something_wrong)
+                    }
                 }
             }
         }
     }
 
-    private fun getPopularMovies(movieAdapter: MovieAdapter) {
+    private fun getPopularMovies() {
         homeViewModel.movies.observe(viewLifecycleOwner) { movies ->
             if (movies != null) {
                 when (movies) {
-                    is Resource.Loading -> binding.pbMovie.visibility = View.VISIBLE
+                    is Resource.Loading -> binding?.pbMovie?.visibility = View.VISIBLE
                     is Resource.Success -> {
-                        binding.pbMovie.visibility = View.GONE
-                        movieAdapter.setData(movies.data)
+                        binding?.pbMovie?.visibility = View.GONE
+                        movieListAdapter.submitList(movies.data)
                     }
 
                     is Resource.Error -> {
-                        binding.pbMovie.visibility = View.GONE
-                        binding.viewError.root.visibility = View.VISIBLE
-                        binding.viewError.tvError.text =
-                            movies.message ?: getString(R.string.something_wrong)
+                        binding?.apply {
+                            pbMovie.visibility = View.GONE
+                            viewError.root.visibility = View.VISIBLE
+                            viewError.tvError.text =
+                                movies.message ?: getString(R.string.something_wrong)
+                        }
                     }
                 }
             }
@@ -118,7 +123,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
         compositeDisposable.clear()
     }
 }

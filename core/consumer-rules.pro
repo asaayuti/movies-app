@@ -100,7 +100,6 @@ public *;
 -keep,allowobfuscation,allowshrinking @dagger.hilt.internal.GeneratedEntryPoint class *
 
 -dontwarn com.google.errorprone.annotations.MustBeClosed
- # TODO(b/324097623) Remove the keep rules once test won't be affected by obfuscation
 -keep class kotlin.**
 -keep class javax.** { *; }
 
@@ -108,7 +107,6 @@ public *;
 -keep class kotlin.**
 
 -dontwarn com.google.errorprone.annotations.MustBeClosed
- # TODO(b/324097623) Remove the keep rules once test won't be affected by obfuscation
 -keep class kotlin.**
 
 -keep class dagger.** { *; }

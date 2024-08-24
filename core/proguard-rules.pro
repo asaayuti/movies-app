@@ -39,7 +39,7 @@
 -keep class com.example.core.domain.repository.IMovieRepository { *; }
 -keep class com.example.core.domain.usecase.MovieInteractor { *; }
 -keep class com.example.core.domain.usecase.MovieUseCase { *; }
--keep class com.example.core.ui.MovieAdapter { *; }
+-keep class com.example.core.ui.MovieListAdapter { *; }
 -keep class com.example.core.utils.AppExecutors { *; }
 -keep class com.example.core.utils.UtilsKt { *; }
 
