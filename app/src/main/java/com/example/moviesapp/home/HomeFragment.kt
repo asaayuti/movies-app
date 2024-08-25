@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -38,8 +37,6 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null) {
-            val window = requireActivity().window
-            window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.main_color)
 
             movieListAdapter = MovieListAdapter { movieId ->
                 Intent(activity, DetailActivity::class.java).apply {

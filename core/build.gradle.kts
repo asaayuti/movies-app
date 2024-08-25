@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.dagger.hilt.android)
+    alias(libs.plugins.google.devtools.ksp)
     id("kotlin-parcelize")
     id("kotlin-kapt")
 }
@@ -58,7 +59,7 @@ android {
 dependencies {
 
     implementation(libs.androidx.room.runtime)
-    kapt(libs.room.compiler)
+    ksp(libs.room.compiler)
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

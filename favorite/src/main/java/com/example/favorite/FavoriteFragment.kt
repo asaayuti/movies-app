@@ -62,10 +62,8 @@ class FavoriteFragment : Fragment() {
 
             favoriteViewModel.favoriteMovies.observe(viewLifecycleOwner) { dataMovies ->
                 movieListAdapter.submitList(dataMovies)
-                binding?.let {
-                    it.viewEmpty.root.visibility =
-                        if (dataMovies.isNotEmpty()) View.GONE else View.VISIBLE
-                }
+                binding?.viewEmpty?.root?.visibility =
+                    if (dataMovies.isNotEmpty()) View.GONE else View.VISIBLE
             }
 
             binding?.rvFavorite?.apply {
