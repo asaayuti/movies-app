@@ -27,6 +27,11 @@ class MovieListAdapter(
         }
     }
 
+    override fun onViewRecycled(holder: WordViewHolder) {
+        super.onViewRecycled(holder)
+        holder.binding.root.setOnClickListener(null)
+    }
+
     class WordViewHolder(val binding: ItemListMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
@@ -41,7 +46,7 @@ class MovieListAdapter(
 
     class WordsComparator : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem.title === newItem.title
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
