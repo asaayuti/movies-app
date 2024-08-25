@@ -2,7 +2,6 @@ package com.example.core.data.source
 
 import android.annotation.SuppressLint
 import com.example.core.data.source.remote.network.ApiResponse
-import com.example.core.utils.AppExecutors
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 @SuppressLint("CheckResult")
-abstract class NetworkBoundResource<ResultType, RequestType>(private val mExecutors: AppExecutors) {
+abstract class NetworkBoundResource<ResultType, RequestType> {
 
     private val result = PublishSubject.create<Resource<ResultType>>()
     private val mCompositeDisposable = CompositeDisposable()

@@ -25,7 +25,7 @@ class MovieRepository @Inject constructor(
 ) : IMovieRepository {
 
     override fun getAllMovie(): Flowable<Resource<List<Movie>>> =
-        object : NetworkBoundResource<List<Movie>, List<MovieResponse>>(appExecutors) {
+        object : NetworkBoundResource<List<Movie>, List<MovieResponse>>() {
             override fun loadFromDB(): Flowable<List<Movie>> {
                 return localDataSource.getAllMovie().map {
                     DataMapper.mapEntitiesToDomain(it)
@@ -51,7 +51,7 @@ class MovieRepository @Inject constructor(
         }.asFlowable()
 
     override fun getSearchMovie(query: String): Flowable<Resource<List<Movie>>> =
-        object : NetworkBoundResource<List<Movie>, List<MovieResponse>>(appExecutors) {
+        object : NetworkBoundResource<List<Movie>, List<MovieResponse>>() {
             override fun loadFromDB(): Flowable<List<Movie>> =
                 localDataSource.getSearchMovie(query).map { DataMapper.mapEntitiesToDomain(it) }
 
