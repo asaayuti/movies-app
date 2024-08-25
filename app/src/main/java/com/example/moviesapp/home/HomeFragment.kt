@@ -39,7 +39,7 @@ class HomeFragment : Fragment() {
         if (activity != null) {
 
             movieListAdapter = MovieListAdapter { movieId ->
-                Intent(activity, DetailActivity::class.java).apply {
+                Intent(requireContext(), DetailActivity::class.java).apply {
                     putExtra(DetailActivity.EXTRA_MOVIE_ID, movieId)
                     startActivity(this)
                 }
@@ -120,6 +120,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding?.rvMovie?.adapter = null
         binding = null
         compositeDisposable.clear()
     }

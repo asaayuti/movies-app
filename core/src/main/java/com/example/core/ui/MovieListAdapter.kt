@@ -11,40 +11,37 @@ import com.example.core.utils.loadImage
 
 class MovieListAdapter(
     private val onItemClick: (Int) -> Unit
-) : ListAdapter<Movie, MovieListAdapter.WordViewHolder>(WordsComparator()) {
+) : ListAdapter<Movie, MovieListAdapter.MovieViewHolder>(MovieComparator()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val binding =
             ItemListMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return WordViewHolder(binding)
+        return MovieViewHolder(binding, onItemClick)
     }
 
-    override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movie = getItem(position)
         holder.bind(movie)
-        holder.binding.root.setOnClickListener {
-            onItemClick(movie.id)
-        }
     }
 
-    override fun onViewRecycled(holder: WordViewHolder) {
-        super.onViewRecycled(holder)
-        holder.binding.root.setOnClickListener(null)
-    }
-
-    class WordViewHolder(val binding: ItemListMovieBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class MovieViewHolder(
+        private val binding: ItemListMovieBinding,
+        private val onItemClick: (Int) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
-            if (movie.posterPath.isNotEmpty()) {
-                binding.apply {
+            binding.apply {
+                if (movie.posterPath.isNotEmpty()) {
                     ivFilm.loadImage(movie.posterPath)
-                    tvTitleFilm.text = movie.title
+                }
+                tvTitleFilm.text = movie.title
+                root.setOnClickListener {
+                    onItemClick(movie.id)
                 }
             }
         }
     }
 
-    class WordsComparator : DiffUtil.ItemCallback<Movie>() {
+    class MovieComparator : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.id == newItem.id
         }
