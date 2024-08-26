@@ -32,8 +32,8 @@ class MovieListAdapter(
             binding.apply {
                 if (movie.posterPath.isNotEmpty()) {
                     ivFilm.loadImage(movie.posterPath)
+                    tvTitleFilm.text = movie.title
                 }
-                tvTitleFilm.text = movie.title
                 root.setOnClickListener {
                     onItemClick(movie.id)
                 }
