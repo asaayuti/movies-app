@@ -1,7 +1,6 @@
 package com.example.core.data.source.remote
 
 import android.annotation.SuppressLint
-import android.util.Log
 import com.example.core.data.source.remote.network.ApiResponse
 import com.example.core.data.source.remote.network.ApiService
 import com.example.core.data.source.remote.response.MovieResponse
@@ -34,7 +33,6 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 )
             }, { error ->
                 resultData.onNext(ApiResponse.Error(error.message.toString()))
-                Log.e(TAG, "getAllMovie: $error")
             })
 
         return resultData.toFlowable(BackpressureStrategy.BUFFER)
@@ -57,14 +55,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 )
             }, { error ->
                 resultData.onNext(ApiResponse.Error(error.message.toString()))
-                Log.e(TAG, "getSearchMovie: $error")
             })
 
         return resultData.toFlowable(BackpressureStrategy.BUFFER)
     }
-
-    companion object {
-        private const val TAG = "RemoteDataSource"
-    }
-
 }

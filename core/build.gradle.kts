@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -7,6 +10,13 @@ plugins {
     id("kotlin-kapt")
 }
 apply(from = "../shared_dependencies.gradle")
+
+val properties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        load(FileInputStream(localPropertiesFile))
+    }
+}
 
 android {
     namespace = "com.example.core"
@@ -18,12 +28,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        buildConfigField("String", "API_KEY", "\"ca6da6d30ad6a9105dd5053fe25975cb\"")
-        buildConfigField(
-            "String",
-            "CERTIFICATE_KEY",
-            "\"sha256/k1Hdw5sdSn5kh/gemLVSQD/P4i4IBQEY1tW4WNxh9XM=\""
-        )
+        buildConfigField("String", "HOSTNAME", "\"${properties["HOSTNAME"]}\"")
+        buildConfigField("String", "API_KEY", "\"${properties["API_KEY"]}\"")
+        buildConfigField("String", "BASE_URL", "\"${properties["BASE_URL"]}\"")
+        buildConfigField("String", "IMAGE_URL", "\"${properties["IMAGE_URL"]}\"")
+        buildConfigField("String", "CERTIFICATE_KEY", "\"${properties["CERTIFICATE_KEY"]}\"")
 
     }
 
