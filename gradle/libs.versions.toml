@@ -1,7 +1,6 @@
 [versions]
 activityKtx = "1.9.1"
 agp = "8.5.2"
-androidDatabaseSqlcipher = "4.5.1"
 appcompat = "1.7.0"
 blurview = "version-2.0.3"
 coreKtx = "1.13.1"
@@ -13,7 +12,7 @@ glide = "4.16.0"
 hiltAndroid = "2.48"
 junit = "4.13.2"
 junitVersion = "1.2.1"
-kotlin = "1.9.10"
+kotlin = "1.9.22"
 leakcanaryAndroid = "2.14"
 loggingInterceptor = "4.11.0"
 material = "1.12.0"
@@ -22,15 +21,15 @@ retrofit = "2.11.0"
 lifecycleLivedataKtx = "2.8.4"
 roomCompiler = "2.6.1"
 roomRuntime = "2.6.1"
-ksp = "1.9.10-1.0.13"
+ksp = "1.9.22-1.0.17"
 rxandroid = "2.1.1"
 rxbinding = "2.0.0"
 rxjava = "2.2.21"
+sqlcipherAndroid = "4.6.1"
 sqliteKtx = "2.4.0"
 
 [libraries]
 adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
-android-database-sqlcipher = { module = "net.zetetic:android-database-sqlcipher", version.ref = "androidDatabaseSqlcipher" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -59,6 +58,7 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCom
 rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid" }
 rxbinding = { module = "com.jakewharton.rxbinding2:rxbinding", version.ref = "rxbinding" }
 rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjava" }
+sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipherAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
