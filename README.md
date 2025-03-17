@@ -8,24 +8,28 @@ Shows list of movies is fetched from an API and stored locally in a database for
 Users can mark movies as favorites and search movies.
 
 ### Preview
+<table align="start">
+  <tr>
+    <td align="center">
+      <img src="preview/welcome.jpg" alt="Welcome" width="200" height="400"/><br/>
+      <b>Welcome</b>
+    </td>
+    <td align="center">
+      <img src="preview/home.jpg" alt="Home" width="200" height="400"/><br/>
+      <b>Home</b>
+    </td>
+    <td align="center">
+      <img src="preview/detail.jpg" alt="Detail" width="200" height="400"/><br/>
+      <b>Detail</b>
+    </td>
+    <td align="center">
+      <img src="preview/favorite.jpg" alt="Favorite" width="200" height="400"/><br/>
+      <b>Favorite</b>
+    </td>
+  </tr>
+</table>
 
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="preview/welcome.jpg" alt="Welcome" width="200"/>
-    <figcaption style="text-align: center;">Welcome</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="preview/home.jpg" alt="Home" width="200"/>
-    <figcaption style="text-align: center;">Home</figcaption>
-  </figure>
 
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="preview/detail.jpg" alt="Detail" width="200"/>
-    <figcaption style="text-align: center;">Detail</figcaption>
-  </figure>
-  <figure style="display: inline-block; margin: 10px;">
-    <img src="preview/favorite.jpg" alt="Favorite" width="200"/>
-    <figcaption style="text-align: center;">Favorite</figcaption>
-  </figure>
 
 ## Tech Stack
 
