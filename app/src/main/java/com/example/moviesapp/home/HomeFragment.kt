@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.core.data.source.Resource
@@ -63,6 +66,17 @@ class HomeFragment : Fragment() {
 
             observeMovies()
             setupSearchStream()
+
+            binding?.etSearch?.let { editText ->
+                ViewCompat.setOnApplyWindowInsetsListener(editText) { v, insets ->
+                    val statusBarInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+                    val defaultMargin = (16 * v.resources.displayMetrics.density).toInt()
+                    v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                        topMargin = statusBarInset + defaultMargin
+                    }
+                    insets
+                }
+            }
         }
     }
 

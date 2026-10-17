@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.core.ui.MovieListAdapter
 import com.example.favorite.databinding.FragmentFavoriteBinding
@@ -70,6 +73,19 @@ class FavoriteFragment : Fragment() {
                 layoutManager = GridLayoutManager(context, 2)
                 setHasFixedSize(true)
                 adapter = movieListAdapter
+
+                ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
+                    val statusBarInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+                    val navigationBarInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+                    val defaultTop = (8 * v.resources.displayMetrics.density).toInt()
+                    val defaultBottom = (150 * v.resources.displayMetrics.density).toInt()
+
+                    v.updatePadding(
+                        top = statusBarInset + defaultTop,
+                        bottom = navigationBarInset + defaultBottom
+                    )
+                    insets
+                }
             }
         }
     }

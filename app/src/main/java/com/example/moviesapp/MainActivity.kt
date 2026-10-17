@@ -1,8 +1,11 @@
 package com.example.moviesapp
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.moviesapp.databinding.ActivityMainBinding
@@ -15,14 +18,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val window = window
-        window.statusBarColor = ContextCompat.getColor(this, R.color.main_color) // Status bar
-        window.navigationBarColor =
-            ContextCompat.getColor(this, R.color.main_color) // Navigation bar
+        // Handle edge-to-edge window insets for BottomNavigationView so it doesn't overlap system gesture navigation bar
+        ViewCompat.setOnApplyWindowInsetsListener(binding.navView) { view, insets ->
+            val bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+            view.updatePadding(bottom = bottomInset)
+            insets
+        }
 
         val navView: BottomNavigationView = binding.navView
         val navHostFragment =
@@ -31,6 +37,4 @@ class MainActivity : AppCompatActivity() {
 
         navView.setupWithNavController(navController)
     }
-
-
 }
