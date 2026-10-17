@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.core.view.ViewCompat
@@ -27,6 +29,7 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
     private var binding: FragmentHomeBinding? = null
     private val compositeDisposable = CompositeDisposable()
+    private var backPressedTime = 0L
 
     private lateinit var movieListAdapter: MovieListAdapter
 
@@ -41,6 +44,17 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null) {
+
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (backPressedTime + 2000 > System.currentTimeMillis()) {
+                        requireActivity().finish()
+                    } else {
+                        Toast.makeText(requireContext(), getString(R.string.press_back_again_to_exit), Toast.LENGTH_SHORT).show()
+                    }
+                    backPressedTime = System.currentTimeMillis()
+                }
+            })
 
             movieListAdapter = MovieListAdapter { movieId ->
                 Intent(requireContext(), DetailActivity::class.java).apply {

@@ -23,5 +23,6 @@
     <string name="something_wrong">Oops.. something went wrong</string>
     <string name="no_data">Empty data</string>
     <string name="title_favorite">Favorite</string>
+    <string name="press_back_again_to_exit">Tekan sekali lagi untuk keluar</string>
 
 </resources>
