@@ -1,4 +1,4 @@
-[![asaayuti](https://circleci.com/gh/asaayuti/movies-app.svg?style=svg)](https://circleci.com/gh/asaayuti/movies-app)
+[![Android CI](https://github.com/asaayuti/movies-app/actions/workflows/android_ci.yml/badge.svg)](https://github.com/asaayuti/movies-app/actions/workflows/android_ci.yml)
 
 # Clean Architecture Movies App
 
