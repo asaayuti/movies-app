@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
 
         // Handle edge-to-edge window insets for BottomNavigationView so it doesn't overlap system gesture navigation bar
         ViewCompat.setOnApplyWindowInsetsListener(binding.navView) { view, insets ->

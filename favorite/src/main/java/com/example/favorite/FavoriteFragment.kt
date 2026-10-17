@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.core.ui.MovieListAdapter
@@ -53,6 +54,9 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val window = requireActivity().window
+        WindowInsetsControllerCompat(window, view).isAppearanceLightStatusBars = false
 
         if (activity != null) {
 

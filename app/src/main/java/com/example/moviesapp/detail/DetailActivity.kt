@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.bumptech.glide.Glide
 import com.example.core.domain.model.Movie
 import com.example.core.utils.loadImage
@@ -31,6 +32,8 @@ class DetailActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
 
         binding.ivBack.setOnClickListener { finish() }
 
