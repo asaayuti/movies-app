@@ -6,7 +6,7 @@ import io.reactivex.Flowable
 
 interface IMovieRepository {
 
-    fun getAllMovie(): Flowable<Resource<List<Movie>>>
+    fun getAllMovie(page: Int = 1): Flowable<Resource<List<Movie>>>
 
     fun getFavoriteMovie(): Flowable<List<Movie>>
 
@@ -14,5 +14,5 @@ interface IMovieRepository {
 
     fun getMovieDetail(movieId: Int): Flowable<Movie>
 
-    fun getSearchMovie(query: String): Flowable<Resource<List<Movie>>>
+    fun getSearchMovie(query: String, page: Int = 1): Flowable<Resource<List<Movie>>>
 }

@@ -8,10 +8,10 @@ import javax.inject.Inject
 
 class MovieInteractor @Inject constructor(private val movieRepository: IMovieRepository) :
     MovieUseCase {
-    override fun getAllMovie(): Flowable<Resource<List<Movie>>> = movieRepository.getAllMovie()
+    override fun getAllMovie(page: Int): Flowable<Resource<List<Movie>>> = movieRepository.getAllMovie(page)
 
-    override fun getSearchMovie(query: String): Flowable<Resource<List<Movie>>> =
-        movieRepository.getSearchMovie(query)
+    override fun getSearchMovie(query: String, page: Int): Flowable<Resource<List<Movie>>> =
+        movieRepository.getSearchMovie(query, page)
 
     override fun getFavoriteMovie(): Flowable<List<Movie>> = movieRepository.getFavoriteMovie()
 

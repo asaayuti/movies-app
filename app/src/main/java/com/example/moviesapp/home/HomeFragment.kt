@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.core.data.source.Resource
 import com.example.core.ui.MovieListAdapter
 import com.example.moviesapp.R
@@ -49,6 +50,15 @@ class HomeFragment : Fragment() {
                 layoutManager = GridLayoutManager(context, 2)
                 setHasFixedSize(true)
                 adapter = movieListAdapter
+
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        if (dy > 0 && !recyclerView.canScrollVertically(1)) {
+                            homeViewModel.loadNextPage()
+                        }
+                    }
+                })
             }
 
             observeMovies()
@@ -61,9 +71,11 @@ class HomeFragment : Fragment() {
             if (movies != null) {
                 when (movies) {
                     is Resource.Loading -> {
-                        binding?.apply {
-                            pbMovie.visibility = View.VISIBLE
-                            viewError.root.visibility = View.GONE
+                        if (movies.data.isNullOrEmpty()) {
+                            binding?.apply {
+                                pbMovie.visibility = View.VISIBLE
+                                viewError.root.visibility = View.GONE
+                            }
                         }
                     }
 
@@ -76,11 +88,15 @@ class HomeFragment : Fragment() {
                     }
 
                     is Resource.Error -> {
-                        binding?.apply {
-                            pbMovie.visibility = View.GONE
-                            viewError.root.visibility = View.VISIBLE
-                            viewError.tvError.text =
-                                movies.message ?: getString(R.string.something_wrong)
+                        binding?.pbMovie?.visibility = View.GONE
+                        if (movies.data.isNullOrEmpty()) {
+                            binding?.apply {
+                                viewError.root.visibility = View.VISIBLE
+                                viewError.tvError.text =
+                                    movies.message ?: getString(R.string.something_wrong)
+                            }
+                        } else {
+                            movieListAdapter.submitList(movies.data)
                         }
                     }
                 }

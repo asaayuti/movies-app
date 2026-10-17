@@ -9,8 +9,11 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("movie/popular")
-    fun getPopularMovies(): Flowable<PopularMovieResponse>
+    fun getPopularMovies(@Query("page") page: Int = 1): Flowable<PopularMovieResponse>
 
     @GET("search/movie")
-    fun getSearchMovie(@Query("query") query: String): Flowable<SearchMovieResponse>
+    fun getSearchMovie(
+        @Query("query") query: String,
+        @Query("page") page: Int = 1
+    ): Flowable<SearchMovieResponse>
 }

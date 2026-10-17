@@ -23,7 +23,7 @@ class MovieRepository @Inject constructor(
     private val appExecutors: AppExecutors
 ) : IMovieRepository {
 
-    override fun getAllMovie(): Flowable<Resource<List<Movie>>> =
+    override fun getAllMovie(page: Int): Flowable<Resource<List<Movie>>> =
         object : NetworkBoundResource<List<Movie>, List<MovieResponse>>() {
             override fun loadFromDB(): Flowable<List<Movie>> {
                 return localDataSource.getAllMovie().map {
@@ -31,10 +31,10 @@ class MovieRepository @Inject constructor(
                 }
             }
 
-            override fun shouldFetch(data: List<Movie>?): Boolean = data.isNullOrEmpty()
+            override fun shouldFetch(data: List<Movie>?): Boolean = page > 1 || data.isNullOrEmpty()
 
             override fun createCall(): Flowable<ApiResponse<List<MovieResponse>>> {
-                return remoteDataSource.getAllMovie()
+                return remoteDataSource.getAllMovie(page)
             }
 
             override fun saveCallResult(data: List<MovieResponse>) {
@@ -48,7 +48,7 @@ class MovieRepository @Inject constructor(
             }
         }.asFlowable()
 
-    override fun getSearchMovie(query: String): Flowable<Resource<List<Movie>>> =
+    override fun getSearchMovie(query: String, page: Int): Flowable<Resource<List<Movie>>> =
         object : NetworkBoundResource<List<Movie>, List<MovieResponse>>() {
             override fun loadFromDB(): Flowable<List<Movie>> =
                 localDataSource.getSearchMovie(query).map { DataMapper.mapEntitiesToDomain(it) }
@@ -56,7 +56,7 @@ class MovieRepository @Inject constructor(
             override fun shouldFetch(data: List<Movie>?): Boolean = true
 
             override fun createCall(): Flowable<ApiResponse<List<MovieResponse>>> =
-                remoteDataSource.getSearchMovie(query)
+                remoteDataSource.getSearchMovie(query, page)
 
             override fun saveCallResult(data: List<MovieResponse>) {
                 val movieList = DataMapper.mapResponseToEntities(data)

@@ -16,10 +16,10 @@ import javax.inject.Singleton
 @SuppressLint("CheckResult")
 class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
-    fun getAllMovie(): Flowable<ApiResponse<List<MovieResponse>>> {
+    fun getAllMovie(page: Int = 1): Flowable<ApiResponse<List<MovieResponse>>> {
         val resultData = PublishSubject.create<ApiResponse<List<MovieResponse>>>()
 
-        val client = apiService.getPopularMovies()
+        val client = apiService.getPopularMovies(page)
 
         client
             .subscribeOn(Schedulers.computation())
@@ -38,10 +38,10 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         return resultData.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    fun getSearchMovie(query: String): Flowable<ApiResponse<List<MovieResponse>>> {
+    fun getSearchMovie(query: String, page: Int = 1): Flowable<ApiResponse<List<MovieResponse>>> {
         val resultData = PublishSubject.create<ApiResponse<List<MovieResponse>>>()
 
-        val client = apiService.getSearchMovie(query)
+        val client = apiService.getSearchMovie(query, page)
 
         client
             .subscribeOn(Schedulers.computation())
