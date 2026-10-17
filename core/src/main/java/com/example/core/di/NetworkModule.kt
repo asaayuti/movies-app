@@ -22,9 +22,11 @@ class NetworkModule {
 
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
-        val certificatePinner = CertificatePinner.Builder()
-            .add(Constants.HOSTNAME, Constants.CERTIFICATE_KEY)
-            .build()
+        val certificatePinnerBuilder = CertificatePinner.Builder()
+        if (Constants.CERTIFICATE_KEY.startsWith("sha256/") || Constants.CERTIFICATE_KEY.startsWith("sha1/")) {
+            certificatePinnerBuilder.add(Constants.HOSTNAME, Constants.CERTIFICATE_KEY)
+        }
+        val certificatePinner = certificatePinnerBuilder.build()
         val loggingInterceptor = HttpLoggingInterceptor().setLevel(
             if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         )

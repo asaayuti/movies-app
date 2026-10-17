@@ -28,11 +28,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        buildConfigField("String", "HOSTNAME", "\"${properties["HOSTNAME"]}\"")
-        buildConfigField("String", "API_KEY", "\"${properties["API_KEY"]}\"")
-        buildConfigField("String", "BASE_URL", "\"${properties["BASE_URL"]}\"")
-        buildConfigField("String", "IMAGE_URL", "\"${properties["IMAGE_URL"]}\"")
-        buildConfigField("String", "CERTIFICATE_KEY", "\"${properties["CERTIFICATE_KEY"]}\"")
+        buildConfigField("String", "HOSTNAME", "\"${properties["HOSTNAME"] ?: "api.themoviedb.org"}\"")
+        buildConfigField("String", "API_KEY", "\"${properties["API_KEY"] ?: ""}\"")
+        buildConfigField("String", "BASE_URL", "\"${properties["BASE_URL"] ?: "https://api.themoviedb.org/3/"}\"")
+        buildConfigField("String", "IMAGE_URL", "\"${properties["IMAGE_URL"] ?: "https://image.tmdb.org/t/p/w500"}\"")
+        buildConfigField("String", "CERTIFICATE_KEY", "\"${properties["CERTIFICATE_KEY"] ?: ""}\"")
 
     }
 

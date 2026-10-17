@@ -21,14 +21,16 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
-            .subscribe { value ->
+            .subscribe({ value ->
                 dbSource.unsubscribeOn(Schedulers.io())
                 if (shouldFetch(value)) {
                     fetchFromNetwork()
                 } else {
                     result.onNext(Resource.Success(value))
                 }
-            }
+            }, { error ->
+                result.onNext(Resource.Error(error.message.toString(), null))
+            })
         mCompositeDisposable.add(db)
     }
 

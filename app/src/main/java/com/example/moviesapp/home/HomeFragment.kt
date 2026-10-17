@@ -60,13 +60,15 @@ class HomeFragment : Fragment() {
         val searchStream = binding?.etSearch?.let {
             RxTextView.textChanges(it)
                 .map { binding?.etSearch?.text.toString() }
-                .subscribe { text ->
+                .subscribe({ text ->
                     if (text.isNotEmpty()) {
                         getSearchMovies(text)
                     } else {
                         getPopularMovies()
                     }
-                }
+                }, { error ->
+                    android.util.Log.e("HomeFragment", "Search textChanges error: $error")
+                })
         }
         if (searchStream != null) {
             compositeDisposable.add(searchStream)
