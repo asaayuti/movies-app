@@ -11,7 +11,6 @@ import com.example.core.domain.repository.IMovieRepository
 import com.example.core.utils.AppExecutors
 import com.example.core.utils.DataMapper
 import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,10 +41,9 @@ class MovieRepository @Inject constructor(
                 val movieList = DataMapper.mapResponseToEntities(data)
                 localDataSource.insertMovies(movieList)
                     .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                     }, { error ->
-                        Log.e("SaveCallResult", "Error deleting movies: $error")
+                        Log.e("SaveCallResult", "Error inserting movies: $error")
                     })
             }
         }.asFlowable()
@@ -55,7 +53,7 @@ class MovieRepository @Inject constructor(
             override fun loadFromDB(): Flowable<List<Movie>> =
                 localDataSource.getSearchMovie(query).map { DataMapper.mapEntitiesToDomain(it) }
 
-            override fun shouldFetch(data: List<Movie>?): Boolean = data.isNullOrEmpty()
+            override fun shouldFetch(data: List<Movie>?): Boolean = true
 
             override fun createCall(): Flowable<ApiResponse<List<MovieResponse>>> =
                 remoteDataSource.getSearchMovie(query)
@@ -64,10 +62,9 @@ class MovieRepository @Inject constructor(
                 val movieList = DataMapper.mapResponseToEntities(data)
                 localDataSource.insertMovies(movieList)
                     .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                     }, { error ->
-                        Log.e("SaveCallResult", "Error deleting movies: $error")
+                        Log.e("SaveCallResult", "Error inserting movies: $error")
                     })
             }
         }.asFlowable()

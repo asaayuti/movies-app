@@ -45,65 +45,33 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            getMovies()
-
             binding?.rvMovie?.apply {
                 layoutManager = GridLayoutManager(context, 2)
                 setHasFixedSize(true)
                 adapter = movieListAdapter
             }
-        }
 
-    }
-
-    private fun getMovies() {
-        val searchStream = binding?.etSearch?.let {
-            RxTextView.textChanges(it)
-                .map { binding?.etSearch?.text.toString() }
-                .subscribe({ text ->
-                    if (text.isNotEmpty()) {
-                        getSearchMovies(text)
-                    } else {
-                        getPopularMovies()
-                    }
-                }, { error ->
-                    android.util.Log.e("HomeFragment", "Search textChanges error: $error")
-                })
-        }
-        if (searchStream != null) {
-            compositeDisposable.add(searchStream)
+            observeMovies()
+            setupSearchStream()
         }
     }
 
-    private fun getSearchMovies(text: String) {
-        homeViewModel.getSearchMovie(text).observe(viewLifecycleOwner) { movies ->
-            when (movies) {
-                is Resource.Loading -> binding?.pbMovie?.visibility = View.VISIBLE
-
-                is Resource.Success -> {
-                    binding?.pbMovie?.visibility = View.GONE
-                    movieListAdapter.submitList(movies.data)
-                }
-
-                is Resource.Error -> {
-                    binding?.apply {
-                        pbMovie.visibility = View.GONE
-                        viewError.root.visibility = View.VISIBLE
-                        viewError.tvError.text =
-                            movies.message ?: getString(R.string.something_wrong)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun getPopularMovies() {
-        homeViewModel.movies.observe(viewLifecycleOwner) { movies ->
+    private fun observeMovies() {
+        homeViewModel.moviesResult.observe(viewLifecycleOwner) { movies ->
             if (movies != null) {
                 when (movies) {
-                    is Resource.Loading -> binding?.pbMovie?.visibility = View.VISIBLE
+                    is Resource.Loading -> {
+                        binding?.apply {
+                            pbMovie.visibility = View.VISIBLE
+                            viewError.root.visibility = View.GONE
+                        }
+                    }
+
                     is Resource.Success -> {
-                        binding?.pbMovie?.visibility = View.GONE
+                        binding?.apply {
+                            pbMovie.visibility = View.GONE
+                            viewError.root.visibility = View.GONE
+                        }
                         movieListAdapter.submitList(movies.data)
                     }
 
@@ -117,6 +85,18 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun setupSearchStream() {
+        binding?.etSearch?.let { editText ->
+            val searchStream = RxTextView.textChanges(editText)
+                .subscribe({ text ->
+                    homeViewModel.setSearchQuery(text.toString())
+                }, { error ->
+                    android.util.Log.e("HomeFragment", "Search textChanges error: $error")
+                })
+            compositeDisposable.add(searchStream)
         }
     }
 
