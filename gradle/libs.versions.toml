@@ -30,6 +30,8 @@ sqliteKtx = "2.4.0"
 archCoreTesting = "2.2.0"
 mockito = "5.11.0"
 mockitoKotlin = "5.4.0"
+androidxTestRunner = "1.6.1"
+androidxTestRules = "1.6.1"
 
 [libraries]
 adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
@@ -66,6 +68,8 @@ sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqliteKtx" 
 arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "archCoreTesting" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxTestRules" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
