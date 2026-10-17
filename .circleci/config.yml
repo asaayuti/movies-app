@@ -4,17 +4,22 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/android:2023.11.1
+      - image: cimg/android:2024.01.1
     steps:
       - checkout
       - restore_cache:
-          key: android-orb-v1-
+          key: gradle-cache-v1-{{ checksum "build.gradle.kts" }}-{{ checksum "app/build.gradle.kts" }}-{{ checksum "core/build.gradle.kts" }}
       - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
       - run:
           name: Create Local Properties
-          command: echo "sdk.dir=$ANDROID_HOME" > local.properties
+          command: |
+            echo "sdk.dir=$ANDROID_HOME" > local.properties
+            echo "HOSTNAME=api.themoviedb.org" >> local.properties
+            echo "BASE_URL=https://api.themoviedb.org/3/" >> local.properties
+            echo "IMAGE_URL=https://image.tmdb.org/t/p/w500" >> local.properties
+            echo "API_KEY=ca6da6d30ad6a9105dd5053fe25975cb" >> local.properties
       - run:
           name: Accept Android SDK Licenses
           command: (yes || true) | sdkmanager --licenses
@@ -22,21 +27,25 @@ jobs:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
-          key: 'android-orb-v1-{{ epoch }}'
+          key: gradle-cache-v1-{{ checksum "build.gradle.kts" }}-{{ checksum "app/build.gradle.kts" }}-{{ checksum "core/build.gradle.kts" }}
           paths:
-            - ~/.android/build-cache
-            - ~/.android/cache
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
       - run:
-          name: Run Build
-          command: ./gradlew build
+          name: Run Build and Tests
+          command: ./gradlew lint test assembleDebug
       - store_artifacts:
           path: app/build/reports
-          destination: reports
-      - run:
-          name: Run Tests
-          command: ./gradlew lint test
+          destination: app-reports
+      - store_artifacts:
+          path: core/build/reports
+          destination: core-reports
       - store_test_results:
           path: app/build/test-results
+      - store_test_results:
+          path: core/build/test-results
+      - store_test_results:
+          path: favorite/build/test-results
       - store_artifacts:
           path: app/build/outputs/apk/debug/
-          destination: artifact-file
+          destination: apk-debug
