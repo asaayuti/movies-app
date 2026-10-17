@@ -7,12 +7,12 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 
 @SuppressLint("CheckResult")
 abstract class NetworkBoundResource<ResultType, RequestType> {
 
-    private val result = PublishSubject.create<Resource<ResultType>>()
+    private val result = BehaviorSubject.create<Resource<ResultType>>()
     private val mCompositeDisposable = CompositeDisposable()
 
     init {
