@@ -3,9 +3,7 @@ package com.example.moviesapp
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.navigation.fragment.NavHostFragment
@@ -31,10 +29,6 @@ class MainActivity : AppCompatActivity() {
             view.updatePadding(bottom = bottomInset)
             insets
         }
-
-        // Set status bar color to white and appearance light status bars for dark icons
-        window.statusBarColor = ContextCompat.getColor(this, R.color.white)
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
 
         val navView: BottomNavigationView = binding.navView
         val navHostFragment =
